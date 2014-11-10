@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>net.take5</groupId>
+    <artifactId>take5-online</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>take5-online-extras</artifactId>
+  <name>take5-online-extras</name>
+  <url>http://www.take5-online.net</url>
+  <description>Projet contenant des ressources pour Take 5 online</description>
+</project>
