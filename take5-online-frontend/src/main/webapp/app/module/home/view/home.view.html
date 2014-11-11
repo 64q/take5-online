@@ -1,0 +1,24 @@
+<div class="container-fluid">
+	<table class="table">
+		<tr>
+			<th>Lobby's name</th>
+			<th>Owner</th>
+			<th>Number of users</th>
+		</tr>
+		<tr ng-repeat="lobby in game.lobbies">
+			<td>{{lobby.name}}</td>
+			<td>{{lobby.owner.username}}</td>
+			<td>{{lobby.users.length}}</td>
+		</tr>
+	</table>
+	
+	<table class="table">
+		<tr>
+			<th>Username</th>
+		</tr>
+		<tr ng-repeat="user in game.users">
+			<td>{{user.username}}</td>
+		</tr>
+	</table>
+	<a ui-sref="lobbyCreate">Create a lobby</a>	
+</div>
