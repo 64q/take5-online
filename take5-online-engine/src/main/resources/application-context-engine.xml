@@ -9,15 +9,4 @@
   <import resource="classpath:application-context-commons.xml" />
 
   <context:component-scan base-package="net.take5.engine" />
-
-  <bean id="messageSource"
-    class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basenames">
-        <list>
-            <value>hello</value>
-            <value>help</value>
-            <value>errors</value>
-        </list>
-    </property>
-  </bean>
 </beans>

@@ -13,7 +13,7 @@
   <import resource="classpath:application-context-engine.xml" />
   
   <!-- Scan des packages -->
-  <context:component-scan base-package="net.take5.backend.controller" />
+  <context:component-scan base-package="net.take5.backend" />
   
   <!-- Support spring mvc -->
   <mvc:annotation-driven />
