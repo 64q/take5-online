@@ -8,5 +8,7 @@ package net.take5.commons.pojo.output;
 public enum ErrorCode
 {
     /** Non connecté */
-    NOT_LOGGED;
+    NOT_LOGGED,
+    /** Username déjà pris */
+    USERNAME_ALREADY_TAKEN, USERNAME_EMPTY, LOBBY_NAME_EMPTY, LOBBY_NOT_FOUND, ALREADY_IN_LOBBY, LOBBY_NOT_WAITING, NOT_IN_LOBBY, CANNOT_INIT_GAME;
 }

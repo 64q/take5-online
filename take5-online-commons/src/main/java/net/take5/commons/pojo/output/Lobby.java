@@ -23,9 +23,23 @@ public class Lobby
     /** Liste des utilisateurs dans le lobby */
     private Set<User> users;
 
+    /** Etat du lobby */
+    private LobbyState state;
+
+    public void setState(LobbyState state)
+    {
+        this.state = state;
+    }
+
     public Lobby() {
         uid = UUID.randomUUID();
         users = new HashSet<User>();
+        state = LobbyState.WAITING;
+    }
+
+    public LobbyState getState()
+    {
+        return this.state;
     }
 
     public User getOwner()
@@ -66,5 +80,15 @@ public class Lobby
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    /**
+     * Vérifie si le lobby est vide
+     * 
+     * @return vrai si le lobby est vide, faux sinon
+     */
+    public boolean isEmpty()
+    {
+        return this.users.isEmpty();
     }
 }

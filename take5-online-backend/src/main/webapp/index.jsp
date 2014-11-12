@@ -59,16 +59,28 @@
             list += data.lobbies[i].users[j].username + " ";
           }
           
-          list += "</li>";
+          list += " <input type=\"button\" class=\"join-lobby\" value=\"Rejoindre\" name=\"" + data.lobbies[i].uid + "\" /> <input type=\"button\" class=\"quit-lobby\" value=\"Quitter\" name=\"" + data.lobbies[i].uid + "\" /></li>";
         }
         
         list += "</ul>";
         
         document.querySelector("#lobbies-list").innerHTML = list;
+        
+        defineJoinHandlers();
+        defineQuitHandlers();
       } else if (data.action == "CREATE_LOBBY") {
         if (data.state == "OK") {
           console.info("Lobby créé [ uid = " + data.lobby.uid + ", name = " + data.lobby.name + " ]");
         }
+      } else if (data.action == "NOTIFICATION") {
+        printNotification(data.notification);
+      } else if (data.action == "INIT_GAME") {
+        console.info("Partie démarrée");
+      } else if (data.action == "END_TURN") {
+        console.info("Fin du tour, carte choisie = " + data.card + ", choix automatique = " + data.autoChoice);
+        printNotification("Carte choisie = " + data.card);
+      } else if (data.action == "QUIT_LOBBY") {
+        console.info("Le lobby a été quitté");
       }
     };
 
@@ -114,23 +126,73 @@
     document.querySelector("#create-lobby").addEventListener("click", function(event) {
       var sent = {
         action: "CREATE_LOBBY",
+        params: {
+          name: document.querySelector("#lobby-name").value
+        }
+      };
+
+      socket.send(JSON.stringify(sent));
+    });
+    
+    document.querySelector("#start-game").addEventListener("click", function(event) {
+      var sent = {
+        action: "INIT_GAME",
         params: {}
       };
 
       socket.send(JSON.stringify(sent));
     });
+    
+    function defineJoinHandlers() {
+      var joinLobbies = document.querySelectorAll(".join-lobby");
+      for (var i = 0; i < joinLobbies.length; i++) {
+        joinLobbies[i].addEventListener("click", function() {
+          var sent = {
+              action: "JOIN_LOBBY",
+              params: {
+                lobby: this.name
+              }
+          };
+          
+          socket.send(JSON.stringify(sent));
+        });
+      }
+    }
+    
+    function defineQuitHandlers() {
+      var joinLobbies = document.querySelectorAll(".quit-lobby");
+      for (var i = 0; i < joinLobbies.length; i++) {
+        joinLobbies[i].addEventListener("click", function() {
+          var sent = {
+              action: "QUIT_LOBBY",
+              params: {
+                lobby: this.name
+              }
+          };
+          
+          socket.send(JSON.stringify(sent));
+        });
+      }
+    }
   });
   
   function printMessage(msg) {
-    document.querySelector("#errors").innerHTML = msg; 
+    document.querySelector("#actions").innerHTML = msg; 
+  }
+  
+  function printNotification(msg) {
+    document.querySelector("#notifications").innerHTML = msg; 
   }
 </script>
 </head>
 <body>
   <h1>Test WebSockets</h1>
 
-  <div class="errors">
-    Dernière action : <span style="color:red;" id="errors"></span>
+  <div class="actions">
+    Dernière action : <span style="color:red;" id="actions"></span>
+  </div> 
+  <div class="notifications">
+    Dernière notification : <span style="color:blue;" id="notifications"></span>
   </div> 
 
   <h3>Test connexion pseudo</h3>
@@ -153,7 +215,12 @@
 
   <h3>Créer lobby</h3>
   <p>
-    <input type="button" id="create-lobby" value="Créer lobby" />
+    Nom du lobby : <input type="text" id="lobby-name" /><input type="button" id="create-lobby" value="Créer lobby" />
+  </p>
+  
+  <h3>Démarrer la partie</h3>
+  <p>
+    <input type="button" id="start-game" value="Démarrer la partie" />
   </p>
 
   <hr />

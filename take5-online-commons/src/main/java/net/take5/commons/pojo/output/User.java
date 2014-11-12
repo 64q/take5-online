@@ -1,5 +1,9 @@
 package net.take5.commons.pojo.output;
 
+import java.util.Date;
+
+import javax.websocket.Session;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -20,6 +24,37 @@ public class User
 
     /** Lobby courant de l'utilisateur */
     private Lobby currentLobby;
+
+    /** Dernière activité */
+    private Date lastActivity;
+
+    /** Session WebSocket de l'utilisateur */
+    private Session session;
+
+    @JsonIgnore
+    public Session getSession()
+    {
+        return this.session;
+    }
+
+    public void setSession(Session session)
+    {
+        this.session = session;
+    }
+
+    public User() {
+        lastActivity = new Date();
+    }
+
+    public Date getLastActivity()
+    {
+        return this.lastActivity;
+    }
+
+    public void setLastActivity(Date lastActivity)
+    {
+        this.lastActivity = lastActivity;
+    }
 
     @JsonIgnore
     public Lobby getCurrentLobby()

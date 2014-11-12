@@ -1,12 +1,15 @@
 package net.take5.backend.server;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Queue;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
-import net.take5.backend.context.ConnectedUsers;
 import net.take5.commons.pojo.input.Message;
+import net.take5.commons.pojo.output.Lobby;
+import net.take5.commons.pojo.output.User;
 
 import org.springframework.stereotype.Service;
 
@@ -33,7 +36,14 @@ public interface GameServer
      * 
      * @return
      */
-    public ConnectedUsers getUsers();
+    public Map<Session, User> getUsers();
+
+    /**
+     * Récupère la liste des lobbies courants
+     * 
+     * @return
+     */
+    public Queue<Lobby> getLobbies();
 
     /**
      * Supprime la session du serveur de jeu.
