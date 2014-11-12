@@ -1,8 +1,6 @@
 package net.take5.backend.server.impl;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Queue;
 
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
@@ -12,25 +10,20 @@ import net.take5.backend.context.ServerState;
 import net.take5.backend.server.GameServer;
 import net.take5.commons.pojo.input.Message;
 import net.take5.commons.pojo.output.AbstractResponse;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.User;
-import net.take5.engine.service.Take5Engine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
- * Dispatcher de message reçu depuis la WebSocket
+ * Serveur de jeu, implémente un dispatcher de messages reçus et permet de
+ * supprimer une session du serveur
  * 
  * @author Quentin
  */
 @Component
 public class GameServerImpl implements GameServer
 {
-    @Autowired
-    private Take5Engine gameEngine;
-
     /** Etat du serveur courant */
     @Autowired
     private ServerState serverState;
@@ -47,18 +40,6 @@ public class GameServerImpl implements GameServer
 
         // envoi dans la socket de la réponse à la demande
         session.getBasicRemote().sendObject(response);
-    }
-
-    @Override
-    public Map<Session, User> getUsers()
-    {
-        return serverState.getUsers();
-    }
-
-    @Override
-    public Queue<Lobby> getLobbies()
-    {
-        return this.serverState.getLobbies();
     }
 
     @Override
