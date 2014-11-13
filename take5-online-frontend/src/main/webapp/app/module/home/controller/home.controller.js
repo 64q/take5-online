@@ -31,5 +31,20 @@ controllers.controller('HomeCtrl', [
 			WebSocketManagerService.send({
 				action : ACTION.LIST_USERS
 			});
+			
+			var checkJoinLobbyResult = function(result){
+				console.log('Join success');
+			};
+			WebSocketManagerService.register(ACTION.JOIN_LOBBY).then(
+					checkJoinLobbyResult);
+			
+			$scope.joinLobby = function(uid){
+				WebSocketManagerService.send({
+					action : ACTION.JOIN_LOBBY,
+					params : {
+						lobby : uid
+					}
+				});
+			};
 
 		} ]);

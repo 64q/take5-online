@@ -9,7 +9,8 @@ services.constant('APP_NAME', 'Take 5!').constant('APP_VERSION', '0.0.1')
 			'LOGIN' : 'LOGIN',
 			'LIST_LOBBIES' : 'LIST_LOBBIES',
 			'LIST_USERS' : 'LIST_USERS',
-			'CREATE_LOBBY' : 'CREATE_LOBBY'
+			'CREATE_LOBBY' : 'CREATE_LOBBY',
+			'JOIN_LOBBY' : 'JOIN_LOBBY'
 		}).constant('STATUT', {
 			'OK' : 'OK',
 			'KO' : 'KO'

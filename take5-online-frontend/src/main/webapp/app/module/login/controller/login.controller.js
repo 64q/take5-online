@@ -7,7 +7,7 @@ var controllers = angular.module('take5Controllers.login', []);
 controllers.controller('LoginCtrl', [ '$scope', 'WebSocketManagerService', 'ACTION', '$state', 'STATUT',
 		function($scope, WebSocketManagerService, ACTION, $state, STATUT) {
 			$scope.user = {};
-			
+			$scope.tests = [{v: 65}, {v: 1}];
 			/**
 			 * Callback function which check the result sent by the server.
 			 * 

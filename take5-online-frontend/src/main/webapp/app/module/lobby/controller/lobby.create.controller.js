@@ -15,7 +15,7 @@ controllers.controller('LobbyCreateCtrl', [
 			
 			var checkCreationResultResult = function(data){
 				if(data.state === STATUT.OK){
-					$state.go('home');
+					$state.go('lobby');
 				}else{
 					console.error('error during creation');
 				}

@@ -10,3 +10,88 @@ a {
 }
 
 
+@font-face {
+  font-family: Campus;
+  src: url('../font/CampusA.ttf');
+}
+
+@font-face {
+  font-family: CampusInvert;
+  src: url('../font/CampusA-invert.ttf');
+}
+
+svg .small{
+    font-family: Campus!important;
+    color: white!important;
+    text-shadow: -2px 0 black, 0 1px black, 2px 0 black, 0 -2px black;
+}
+
+svg .big{
+    font-family: CampusInvert!important;
+    color: white!important;
+    text-shadow: -2px 0 black, 0 1px black, 2px 0 black, 0 -2px black;
+}
+
+
+html, body
+{
+    height: 100%;
+}
+
+body {
+	background: linear-gradient(to bottom, #603a7f 0%,#17181e 100%);
+}
+
+.container-fluid {
+	color: rgba(0, 0, 0, 0.63);
+}
+
+.table-background th{
+	background-color: white;
+}
+.table-background tr{
+	background-color: gray;
+}
+.table-background > tbody > tr > td{
+	vertical-align: middle;
+}
+
+
+.login-form {
+position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);	
+  
+}
+
+.login-form .title {
+	font-family: Campus;
+	color: black;
+	display: inline-block;
+	font-size: 100px;
+	-webkit-animation: rotateplane 7.0s infinite ease-in-out;
+  	animation: rotateplane 7.0s infinite ease;
+}
+
+.login-form .btn {
+	padding-bottom: 6.5px;
+}
+
+@-webkit-keyframes rotateplane {
+  0% { -webkit-transform: perspective(120px) }
+  30% { -webkit-transform: perspective(120px) }
+  55% { -webkit-transform: perspective(120px) rotate(920deg) }
+  70% { -webkit-transform: perspective(120px) rotate(90deg) }
+  100% { -webkit-transform: perspective(120px) rotate(360deg) }
+}
+
+@keyframes rotateplane {
+  0% { transform: perspective(120px) }
+  30% { transform: perspective(130px) }
+  55% { transform: perspective(50px) rotate(920deg) }
+  70% { transform: perspective(300px)   rotate(90deg) }
+  100% { transform: perspective(120px)   rotate(360deg) }
+}
+}
+

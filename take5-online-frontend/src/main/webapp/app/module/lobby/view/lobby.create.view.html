@@ -1,6 +1,25 @@
-<div class="container-fluid">
+<div nf-if="creation" class="container-fluid">
+	<h1>Create a Lobby</h1>
+
 	<form ng-submit="createLobby()">
-		<label for="lobbyName">Lobby's name<input id="lobbyName" type="text" ng-model="lobby.name"/></label> 
-		<input type="submit" value="Create"/>
+		<div class="row">
+			<div class="form-group col-md-5">
+				<label for="lobbyName">Lobby's name</label> <input type="text"
+					class="form-control" id="lobbyName" placeholder="Enter name"
+					ng-model="lobby.name">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-1">
+				<button type="submit" class="btn btn-default">Create</button>
+			</div>
+		</div>
 	</form>
+
+</div>
+
+<div nf-if="!creation" class="container-fluid">
+	<h1>The Lobby</h1>
+
+
 </div>
