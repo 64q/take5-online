@@ -1,7 +1,6 @@
 package net.take5.backend.action.impl;
 
 import java.util.Locale;
-import java.util.Map;
 
 import javax.websocket.Session;
 
@@ -9,10 +8,11 @@ import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.message.MessageKey;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.ErrorCode;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.input.params.LoginParams;
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.LoginResponse;
 
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
  * @author Quentin
  */
 @Component("LOGIN")
-public class LoginAction extends AbstractAction<LoginResponse> implements MessageSourceAware
+public class LoginAction extends AbstractAction<LoginParams, LoginResponse> implements MessageSourceAware
 {
     /** Etat courant du serveur */
     @Autowired
@@ -36,9 +36,9 @@ public class LoginAction extends AbstractAction<LoginResponse> implements Messag
     private MessageSource messageSource;
 
     @Override
-    public void execute(Session session, Message message)
+    public void execute(Session session, Message<LoginParams> message)
     {
-        String username = (String) message.getParams().get("username");
+        String username = message.getParams().getUsername();
         User user = new User();
 
         user.setUsername(username);
@@ -54,11 +54,10 @@ public class LoginAction extends AbstractAction<LoginResponse> implements Messag
     }
 
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<LoginParams> message)
     {
         Boolean isValid = true;
-        Map<String, Object> params = message.getParams();
-        String username = (String) params.get("username");
+        String username = message.getParams().getUsername();
 
         // vérifie que le pseudo n'est pas vide
         if (isValid) {

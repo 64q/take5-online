@@ -1,4 +1,4 @@
-package net.take5.commons.pojo.output;
+package net.take5.commons.pojo.output.common;
 
 import java.util.HashSet;
 import java.util.Set;

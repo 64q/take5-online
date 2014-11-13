@@ -7,16 +7,17 @@ import javax.websocket.Session;
 import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
+import net.take5.commons.pojo.input.params.NoParams;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.response.ListLobbiesResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("LIST_LOBBIES")
-public class ListLobbiesAction extends AbstractAction<ListLobbiesResponse>
+public class ListLobbiesAction extends AbstractAction<NoParams, ListLobbiesResponse>
 {
     /** Etat du serveur */
     @Autowired
@@ -30,14 +31,14 @@ public class ListLobbiesAction extends AbstractAction<ListLobbiesResponse>
     }
 
     @Override
-    public void execute(Session session, Message message)
+    public void execute(Session session, Message<NoParams> message)
     {
         response.setLobbies(new ArrayList<Lobby>(serverState.getLobbies()));
         response.setState(State.OK);
     }
 
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<NoParams> message)
     {
         return true;
     }

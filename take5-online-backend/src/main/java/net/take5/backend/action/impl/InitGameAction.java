@@ -11,11 +11,12 @@ import net.take5.backend.context.ServerState;
 import net.take5.backend.scheduler.AsyncExecutor;
 import net.take5.commons.message.MessageKey;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.ErrorCode;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.input.params.NoParams;
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.InitGameResponse;
 import net.take5.engine.service.Take5Engine;
 
@@ -25,7 +26,7 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("INIT_GAME")
-public class InitGameAction extends AbstractAction<InitGameResponse> implements MessageSourceAware
+public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> implements MessageSourceAware
 {
     /** Etat du serveur */
     @Autowired
@@ -50,7 +51,7 @@ public class InitGameAction extends AbstractAction<InitGameResponse> implements 
     }
 
     @Override
-    public void execute(Session session, Message message) throws IOException, EncodeException
+    public void execute(Session session, Message<NoParams> message) throws IOException, EncodeException
     {
         User user = serverState.getUser(session);
         Lobby lobby = user.getCurrentLobby();
@@ -62,6 +63,8 @@ public class InitGameAction extends AbstractAction<InitGameResponse> implements 
 
         // Notification envoyée aux autres participants que la partie a démarrée
         notifyInitGame(lobby);
+
+        response.setHand(user.getHand());
     }
 
     /**
@@ -72,17 +75,20 @@ public class InitGameAction extends AbstractAction<InitGameResponse> implements 
      * @throws EncodeException
      * @throws IOException
      */
-    private void notifyInitGame(Lobby lobby) throws IOException, EncodeException
+    private void notifyInitGame(Lobby lobby)
     {
         for (User user : lobby.getUsers()) {
             if (!user.equals(lobby.getOwner())) {
-                user.getSession().getBasicRemote().sendObject(response);
+                // envoi de la main générée pour cet utilisateur
+                response.setHand(user.getHand());
+
+                user.getSession().getAsyncRemote().sendObject(response);
             }
         }
     }
 
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<NoParams> message)
     {
         Boolean isValid = true;
 

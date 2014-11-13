@@ -1,6 +1,6 @@
 package net.take5.backend.scheduler;
 
-import net.take5.commons.pojo.output.Lobby;
+import net.take5.commons.pojo.output.common.Lobby;
 
 import org.springframework.stereotype.Service;
 

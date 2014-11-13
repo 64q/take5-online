@@ -5,10 +5,10 @@ import java.io.IOException;
 import javax.websocket.EncodeException;
 
 import net.take5.backend.scheduler.AsyncExecutor;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.EndTurnResponse;
 import net.take5.engine.service.Take5Engine;
 
@@ -61,7 +61,14 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
             response.setState(State.OK);
             response.setAction(OutputAction.END_TURN);
             response.setCard(card);
-            response.setAutoChoice(true);
+
+            if (user.getHand().getPickedCard() == null) {
+                response.setAutoChoice(true);
+            } else {
+                response.setAutoChoice(false);
+            }
+
+            response.setHand(user.getHand());
 
             try {
                 user.getSession().getBasicRemote().sendObject(response);

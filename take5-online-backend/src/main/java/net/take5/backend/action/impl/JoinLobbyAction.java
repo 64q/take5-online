@@ -8,13 +8,15 @@ import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.message.MessageKey;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.ErrorCode;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.LobbyState;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.input.params.JoinLobbyParams;
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.LobbyState;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.JoinLobbyResponse;
+import net.take5.commons.pojo.output.response.UserJoinLobbyResponse;
 import net.take5.engine.service.Take5Engine;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("JOIN_LOBBY")
-public class JoinLobbyAction extends AbstractAction<JoinLobbyResponse> implements MessageSourceAware
+public class JoinLobbyAction extends AbstractAction<JoinLobbyParams, JoinLobbyResponse> implements MessageSourceAware
 {
     /** Etat du serveur */
     @Autowired
@@ -44,12 +46,15 @@ public class JoinLobbyAction extends AbstractAction<JoinLobbyResponse> implement
     }
 
     @Override
-    public void execute(Session session, Message message)
+    public void execute(Session session, Message<JoinLobbyParams> message)
     {
-        String lobbyUid = (String) message.getParams().get("lobby");
+        String lobbyUid = message.getParams().getUid();
 
         User user = serverState.getUser(session);
         Lobby lobby = serverState.getLobby(lobbyUid);
+
+        // notification envoyée aux autres membres du lobby
+        notifyLobbyUserJoinLobby(user, lobby);
 
         gameEngine.joinLobby(user, lobby);
 
@@ -57,11 +62,30 @@ public class JoinLobbyAction extends AbstractAction<JoinLobbyResponse> implement
         response.setLobby(lobby);
     }
 
+    /**
+     * Envoie une notification aux autres joueurs qu'un utilisateur a join
+     * 
+     * @param lobby
+     *            le lobby a traiter
+     */
+    private void notifyLobbyUserJoinLobby(User user, Lobby lobby)
+    {
+        UserJoinLobbyResponse response = new UserJoinLobbyResponse();
+
+        response.setState(State.OK);
+        response.setAction(OutputAction.USER_JOIN_LOBBY);
+        response.setUser(user);
+
+        for (User userInLobby : lobby.getUsers()) {
+            userInLobby.getSession().getAsyncRemote().sendObject(response);
+        }
+    }
+
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<JoinLobbyParams> message)
     {
         Boolean isValid = true;
-        String lobbyUid = (String) message.getParams().get("lobby");
+        String lobbyUid = message.getParams().getUid();
 
         // validation que le lobby existe
         if (isValid) {

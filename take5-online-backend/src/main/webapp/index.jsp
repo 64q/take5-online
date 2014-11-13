@@ -81,6 +81,10 @@
         printNotification("Carte choisie = " + data.card);
       } else if (data.action == "QUIT_LOBBY") {
         console.info("Le lobby a été quitté");
+      } else if (data.action == "USER_JOIN_LOBBY") {
+        printNotification("L'utilisateur " + data.user.username + " a rejoint le lobby");
+      } else if (data.action == "USER_QUIT_LOBBY") {
+        printNotification("L'utilisateur " + data.user.username + " a quitté le lobby");
       }
     };
 
@@ -150,7 +154,7 @@
           var sent = {
               action: "JOIN_LOBBY",
               params: {
-                lobby: this.name
+                uid: this.name
               }
           };
           
@@ -166,7 +170,7 @@
           var sent = {
               action: "QUIT_LOBBY",
               params: {
-                lobby: this.name
+                uid: this.name
               }
           };
           

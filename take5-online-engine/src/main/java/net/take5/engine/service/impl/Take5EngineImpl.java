@@ -1,8 +1,11 @@
 package net.take5.engine.service.impl;
 
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.LobbyState;
-import net.take5.commons.pojo.output.User;
+import java.util.Collections;
+import java.util.Stack;
+
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.LobbyState;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.engine.service.Take5Engine;
 
 import org.springframework.stereotype.Component;
@@ -40,7 +43,7 @@ public class Take5EngineImpl implements Take5Engine
         // mise en route de la partie en changeant l'état à en cours
         lobby.setState(LobbyState.RUNNING);
 
-        // TODO initialiser le plateau de jeu
+        drawCards(lobby);
     }
 
     @Override
@@ -48,5 +51,31 @@ public class Take5EngineImpl implements Take5Engine
     {
         lobby.getUsers().remove(user);
         user.setCurrentLobby(null);
+    }
+
+    /**
+     * Mélange le paquet de cartes pour le lobby donné
+     * 
+     * @param lobby
+     * @return
+     */
+    protected void drawCards(Lobby lobby)
+    {
+        Stack<Integer> cards = new Stack<Integer>();
+
+        // remplissage du paquet
+        for (int i = 1; i <= 104; i++) {
+            cards.add(Integer.valueOf(i));
+        }
+
+        // mélange du paquet
+        Collections.shuffle(cards);
+
+        // distribution en round robin
+        for (int i = 0; i < 10; i++) {
+            for (User user : lobby.getUsers()) {
+                user.getHand().getCards().add(cards.pop());
+            }
+        }
     }
 }

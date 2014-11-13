@@ -1,7 +1,7 @@
 package net.take5.commons.pojo.output.response;
 
 import net.take5.commons.pojo.output.AbstractResponse;
-import net.take5.commons.pojo.output.Lobby;
+import net.take5.commons.pojo.output.common.Lobby;
 
 public class CreateLobbyResponse extends AbstractResponse
 {

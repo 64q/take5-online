@@ -3,7 +3,7 @@ package net.take5.backend.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.output.common.User;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

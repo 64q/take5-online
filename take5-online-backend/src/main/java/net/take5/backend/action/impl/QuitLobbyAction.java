@@ -11,13 +11,15 @@ import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.message.MessageKey;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.ErrorCode;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.input.params.QuitLobbyParams;
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.NotificationResponse;
 import net.take5.commons.pojo.output.response.QuitLobbyResponse;
+import net.take5.commons.pojo.output.response.UserJoinLobbyResponse;
 import net.take5.engine.service.Take5Engine;
 
 import org.apache.log4j.Logger;
@@ -27,7 +29,7 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("QUIT_LOBBY")
-public class QuitLobbyAction extends AbstractAction<QuitLobbyResponse> implements MessageSourceAware
+public class QuitLobbyAction extends AbstractAction<QuitLobbyParams, QuitLobbyResponse> implements MessageSourceAware
 {
     /** Logger */
     private static final Logger LOG = Logger.getLogger(QuitLobbyAction.class);
@@ -51,14 +53,17 @@ public class QuitLobbyAction extends AbstractAction<QuitLobbyResponse> implement
     }
 
     @Override
-    public void execute(Session session, Message message)
+    public void execute(Session session, Message<QuitLobbyParams> message)
     {
-        String lobbyUid = (String) message.getParams().get("lobby");
+        String lobbyUid = message.getParams().getUid();
 
         User user = serverState.getUser(session);
         Lobby lobby = serverState.getLobby(lobbyUid);
 
         gameEngine.quitLobby(user, lobby);
+
+        // envoi d'une notification que l'utilisateur est parti du lobby
+        notifyLobbyUserQuitLobby(user, lobby);
 
         // si le créateur quitte le lobby, ce dernier est supprimé
         if (lobby.getOwner().equals(user)) {
@@ -104,11 +109,30 @@ public class QuitLobbyAction extends AbstractAction<QuitLobbyResponse> implement
         }
     }
 
+    /**
+     * Envoie une notification aux autres joueurs qu'un utilisateur a quitté
+     * 
+     * @param lobby
+     *            le lobby a traiter
+     */
+    private void notifyLobbyUserQuitLobby(User user, Lobby lobby)
+    {
+        UserJoinLobbyResponse response = new UserJoinLobbyResponse();
+
+        response.setState(State.OK);
+        response.setAction(OutputAction.USER_QUIT_LOBBY);
+        response.setUser(user);
+
+        for (User userInLobby : lobby.getUsers()) {
+            userInLobby.getSession().getAsyncRemote().sendObject(response);
+        }
+    }
+
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<QuitLobbyParams> message)
     {
         Boolean isValid = true;
-        String lobbyUid = (String) message.getParams().get("lobby");
+        String lobbyUid = message.getParams().getUid();
 
         // validation que le lobby existe
         if (isValid) {
@@ -134,6 +158,19 @@ public class QuitLobbyAction extends AbstractAction<QuitLobbyResponse> implement
             response.setCode(ErrorCode.NOT_IN_LOBBY);
 
             isValid = false;
+        }
+
+        // validation que l'utilisateur est bien dans le lobby ciblé
+        if (isValid) {
+            User user = serverState.getUser(session);
+            Lobby lobby = serverState.getLobby(lobbyUid);
+
+            if (!lobby.getUsers().contains(user)) {
+                response.setReason(messageSource.getMessage(MessageKey.ERROR_NOT_IN_LOBBY, null, Locale.getDefault()));
+                response.setCode(ErrorCode.NOT_IN_LOBBY);
+
+                isValid = false;
+            }
         }
 
         if (!isValid) {

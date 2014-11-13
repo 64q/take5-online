@@ -8,8 +8,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.websocket.Session;
 
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.User;
 
 import org.springframework.stereotype.Component;
 

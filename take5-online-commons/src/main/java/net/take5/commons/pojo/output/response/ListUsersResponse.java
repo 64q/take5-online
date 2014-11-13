@@ -3,7 +3,7 @@ package net.take5.commons.pojo.output.response;
 import java.util.List;
 
 import net.take5.commons.pojo.output.AbstractResponse;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.output.common.User;
 
 /**
  * Réponse liste des utilisateurs

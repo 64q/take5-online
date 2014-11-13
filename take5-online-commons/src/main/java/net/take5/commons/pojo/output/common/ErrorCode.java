@@ -1,4 +1,4 @@
-package net.take5.commons.pojo.output;
+package net.take5.commons.pojo.output.common;
 
 /**
  * Codes d'erreur de l'application

@@ -1,5 +1,9 @@
 package net.take5.commons.pojo.output;
 
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+
 /**
  * Réponse JSON de la WebSocket
  * 

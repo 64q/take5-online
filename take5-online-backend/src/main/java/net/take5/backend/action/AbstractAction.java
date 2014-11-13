@@ -6,6 +6,7 @@ import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
 import net.take5.commons.exception.ResponseNotInitializedException;
+import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.Message;
 import net.take5.commons.pojo.output.AbstractResponse;
 
@@ -21,13 +22,13 @@ import org.springframework.stereotype.Component;
  * @param <T>
  */
 @Component
-public abstract class AbstractAction<T extends AbstractResponse> implements Action
+public abstract class AbstractAction<P extends AbstractParams, R extends AbstractResponse> implements Action<P>
 {
     /** Réponse à l'action */
-    protected T response;
+    protected R response;
 
     @Override
-    public T run(Session session, Message message) throws IOException, EncodeException
+    public R run(Session session, Message<P> message) throws IOException, EncodeException
     {
         init();
 
@@ -60,7 +61,7 @@ public abstract class AbstractAction<T extends AbstractResponse> implements Acti
      * @throws IOException
      * @throws EncodeException
      */
-    abstract public void execute(Session session, Message message) throws IOException, EncodeException;
+    abstract public void execute(Session session, Message<P> message) throws IOException, EncodeException;
 
     /**
      * La méthode de validation doit à la fois vérifier le message en entrée et
@@ -72,5 +73,5 @@ public abstract class AbstractAction<T extends AbstractResponse> implements Acti
      *            message à analyser
      * @return vrai si l'action est exécutable
      */
-    abstract public Boolean validate(Session session, Message message);
+    abstract public Boolean validate(Session session, Message<P> message);
 }

@@ -1,7 +1,7 @@
 package net.take5.engine.service;
 
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.User;
 
 import org.springframework.stereotype.Service;
 

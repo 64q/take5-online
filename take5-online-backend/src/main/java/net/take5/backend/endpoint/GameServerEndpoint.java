@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 import net.take5.backend.decoder.MessageTextDecoder;
 import net.take5.backend.encoder.ResponseTextEncoder;
 import net.take5.backend.server.GameServer;
+import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.Message;
 
 import org.apache.log4j.Logger;
@@ -35,7 +36,7 @@ public class GameServerEndpoint
     }
 
     @OnMessage
-    public void onMessage(Session session, Message message) throws IOException, EncodeException
+    public void onMessage(Session session, Message<AbstractParams> message) throws IOException, EncodeException
     {
         LOG.info("Réception d'un message de type '" + message.getAction().name() + "'");
 

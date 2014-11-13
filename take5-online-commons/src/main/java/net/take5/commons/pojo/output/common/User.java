@@ -1,4 +1,4 @@
-package net.take5.commons.pojo.output;
+package net.take5.commons.pojo.output.common;
 
 import java.util.Date;
 
@@ -31,6 +31,19 @@ public class User
     /** Session WebSocket de l'utilisateur */
     private Session session;
 
+    /** Main courante de l'utilisateur */
+    private Hand hand;
+
+    public Hand getHand()
+    {
+        return this.hand;
+    }
+
+    public void setHand(Hand hand)
+    {
+        this.hand = hand;
+    }
+
     @JsonIgnore
     public Session getSession()
     {
@@ -44,6 +57,7 @@ public class User
 
     public User() {
         lastActivity = new Date();
+        hand = new Hand();
     }
 
     public Date getLastActivity()

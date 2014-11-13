@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
+import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.Message;
 import net.take5.commons.pojo.output.AbstractResponse;
 
@@ -14,7 +15,7 @@ import net.take5.commons.pojo.output.AbstractResponse;
  * 
  * @author Quentin
  */
-public interface Action
+public interface Action<T extends AbstractParams>
 {
     /**
      * 
@@ -28,5 +29,5 @@ public interface Action
      * @throws IOException
      * @throws EncodeException
      */
-    public AbstractResponse run(Session session, Message message) throws IOException, EncodeException;
+    public AbstractResponse run(Session session, Message<T> message) throws IOException, EncodeException;
 }

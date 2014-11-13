@@ -8,11 +8,12 @@ import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.message.MessageKey;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.output.ErrorCode;
-import net.take5.commons.pojo.output.Lobby;
-import net.take5.commons.pojo.output.OutputAction;
-import net.take5.commons.pojo.output.State;
-import net.take5.commons.pojo.output.User;
+import net.take5.commons.pojo.input.params.CreateLobbyParams;
+import net.take5.commons.pojo.output.common.ErrorCode;
+import net.take5.commons.pojo.output.common.Lobby;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.CreateLobbyResponse;
 import net.take5.engine.service.Take5Engine;
 
@@ -23,7 +24,7 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("CREATE_LOBBY")
-public class CreateLobbyAction extends AbstractAction<CreateLobbyResponse> implements
+public class CreateLobbyAction extends AbstractAction<CreateLobbyParams, CreateLobbyResponse> implements
         MessageSourceAware
 {
     /** Message source */
@@ -45,9 +46,9 @@ public class CreateLobbyAction extends AbstractAction<CreateLobbyResponse> imple
     }
 
     @Override
-    public void execute(Session session, Message message)
+    public void execute(Session session, Message<CreateLobbyParams> message)
     {
-        String name = (String) message.getParams().get("name");
+        String name = message.getParams().getName();
         // récupération de l'utilisateur connecté
         User user = serverState.getUsers().get(session);
 
@@ -62,10 +63,10 @@ public class CreateLobbyAction extends AbstractAction<CreateLobbyResponse> imple
     }
 
     @Override
-    public Boolean validate(Session session, Message message)
+    public Boolean validate(Session session, Message<CreateLobbyParams> message)
     {
         Boolean isValid = true;
-        String name = (String) message.getParams().get("name");
+        String name = message.getParams().getName();
 
         // validation que le nom de lobby n'est pas vide
         if (isValid && StringUtils.isBlank(name)) {

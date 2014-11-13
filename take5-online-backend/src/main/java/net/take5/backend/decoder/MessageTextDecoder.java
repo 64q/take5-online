@@ -6,13 +6,14 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
+import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.Message;
 
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MessageTextDecoder implements Decoder.Text<Message>
+public class MessageTextDecoder implements Decoder.Text<Message<AbstractParams>>
 {
     /** Logger */
     private static final Logger LOG = Logger.getLogger(MessageTextDecoder.class);
@@ -27,30 +28,26 @@ public class MessageTextDecoder implements Decoder.Text<Message>
     @Override
     public void init(EndpointConfig config)
     {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void destroy()
     {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
-    public Message decode(String s) throws DecodeException
+    public Message<AbstractParams> decode(String s) throws DecodeException
     {
-        Message message = null;
-
         try {
-            message = mapper.readValue(s, Message.class);
+            @SuppressWarnings("unchecked")
+            Message<AbstractParams> message = mapper.readValue(s, Message.class);
+            return message;
         } catch (IOException e) {
             LOG.error("Erreur de déserialisation", e);
             throw new DecodeException(s, "Erreur lors de la déserialisation", e);
         }
-
-        return message;
     }
 
     @Override
