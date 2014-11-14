@@ -21,14 +21,14 @@ services.factory('WebSocketManagerService', [
 
 			ws.onmessage = function(message) {
 				var result = JSON.parse(message.data);
-
+				console.log(result);
 				if (result.state === STATUT.KO
 						&& result.code === CODE_RESULTAT.NOT_LOGGED) {
 					$state.go('login');
 				} else if (registration[result.action]) {
 					//dispatch message
 					$rootScope.$apply(registration[result.action].defer
-							.resolve(result));
+							.notify(result));
 					if (registration[result.action].unique) {
 						delete registration[result.action];
 					}
@@ -36,11 +36,13 @@ services.factory('WebSocketManagerService', [
 
 			};
 
-			console.log('there');
 			return {
 				send : function(data) {
 					if (wsReady) {
 						console.log(data);
+						if(!data.params){
+							data.params = {};
+						}
 						ws.send(JSON.stringify(data));
 					} else {
 						//websocket not ready

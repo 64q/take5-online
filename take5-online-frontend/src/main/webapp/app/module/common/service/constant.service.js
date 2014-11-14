@@ -10,10 +10,17 @@ services.constant('APP_NAME', 'Take 5!').constant('APP_VERSION', '0.0.1')
 			'LIST_LOBBIES' : 'LIST_LOBBIES',
 			'LIST_USERS' : 'LIST_USERS',
 			'CREATE_LOBBY' : 'CREATE_LOBBY',
-			'JOIN_LOBBY' : 'JOIN_LOBBY'
+			'JOIN_LOBBY' : 'JOIN_LOBBY',
+			'INIT_GAME' : 'INIT_GAME',
+			'USER_JOIN_LOBBY' : 'USER_JOIN_LOBBY',
+			'USER_QUIT_LOBBY' : 'USER_QUIT_LOBBY',
+			'QUIT_LOBBY' : 'QUIT_LOBBY'
 		}).constant('STATUT', {
 			'OK' : 'OK',
 			'KO' : 'KO'
 		}).constant('CODE_RESULTAT', {
 			'NOT_LOGGED' : 'NOT_LOGGED'
+		}).constant('LOBBY_STATE', {
+			'WAITING' : 'WAITING',
+			'RUNNING' : 'RUNNING'
 		});

@@ -1,5 +1,5 @@
 <div class="container-fluid ">
-<h1>The server</h1>
+	<h1 class="shaky">The server</h1>
 	<div class="row">
 		<div class="col-md-6">
 			<table class="table table-background table-striped">
@@ -13,7 +13,8 @@
 					<td>{{lobby.name}}</td>
 					<td>{{lobby.owner.username}}</td>
 					<td>{{lobby.users.length}}</td>
-					<td><button class="btn btn-primary" ng-click="joinLobby(lobby.uid)">Join</button></td>
+					<td><button ng-if="lobby.state === LOBBY_STATE.WAITING" class="btn btn-primary"
+							ng-click="joinLobby(lobby.uid)">Join</button><span ng-if="lobby.state === LOBBY_STATE.RUNNING">Playing</span></td>
 				</tr>
 			</table>
 		</div>
@@ -30,7 +31,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-1">
-			<a class="btn btn-primary" ui-sref="lobbyCreate">Create a lobby</a>
+			<a class="btn btn-primary shaky-rotate" ui-sref="lobbyCreate">Create a lobby</a>
 		</div>
 	</div>
 </div>

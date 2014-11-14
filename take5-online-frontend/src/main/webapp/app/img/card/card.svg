@@ -73,7 +73,7 @@
          sodipodi:role="line"
          id="tspan2987"
          x="7.4412885"
-         y="26.043797">{{c.v}}</tspan></text>
+         y="26.043797">{{card}}</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:28.06592751000000200px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
@@ -86,7 +86,7 @@
          sodipodi:role="line"
          id="tspan2987-7"
          x="-219.88493"
-         y="-255.53513">{{c.v}}</tspan></text>
+         y="-255.53513">{{card}}</tspan></text>
     <g
        id="g3027"
        transform="matrix(0.07294924,0,0,-0.07310541,-11.93458,244.50291)"
@@ -109,7 +109,7 @@
          sodipodi:role="line"
          id="tspan3039"
          x="103.69497"
-         y="166.95859">{{c.v}}</tspan></text>
+         y="166.95859">{{card}}</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:27.47598839000000100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none"
@@ -122,7 +122,7 @@
          sodipodi:role="line"
          id="tspan2987-0"
          x="208.48848"
-         y="24.138597">{{c.v}}</tspan></text>
+         y="24.138597">{{card}}</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:28.06592751000000200px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none"
@@ -135,7 +135,7 @@
          sodipodi:role="line"
          id="tspan2987-7-4"
          x="-8.6365108"
-         y="-255.37489">{{c.v}}</tspan></text>
+         y="-255.37489">{{card}}</tspan></text>
     <g
        id="g3027-8"
        transform="matrix(0.00733954,0,0,-0.00750538,92.472816,25.852777)"

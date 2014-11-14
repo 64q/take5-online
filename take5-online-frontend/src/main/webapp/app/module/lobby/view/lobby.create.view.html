@@ -1,5 +1,5 @@
-<div nf-if="creation" class="container-fluid">
-	<h1>Create a Lobby</h1>
+<div class="container-fluid">
+	<h1 class="shaky">Create a Lobby</h1>
 
 	<form ng-submit="createLobby()">
 		<div class="row">
@@ -11,15 +11,10 @@
 		</div>
 		<div class="row">
 			<div class="col-md-1">
-				<button type="submit" class="btn btn-default">Create</button>
+				<button type="submit" class="btn btn-default shaky-rotate">Create</button>
 			</div>
 		</div>
 	</form>
 
 </div>
 
-<div nf-if="!creation" class="container-fluid">
-	<h1>The Lobby</h1>
-
-
-</div>

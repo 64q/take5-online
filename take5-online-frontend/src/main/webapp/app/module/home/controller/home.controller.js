@@ -6,10 +6,12 @@ var controllers = angular.module('take5Controllers.home', []);
 
 controllers.controller('HomeCtrl', [
 		'$scope',
+		'$rootScope',
 		'WebSocketManagerService',
 		'ACTION',
 		'$state',
-		function($scope, WebSocketManagerService, ACTION, $state) {
+		'STATUT',
+		function($scope, $rootScope, WebSocketManagerService, ACTION, $state, STATUT) {
 			$scope.game = {};
 
 			var checkListLobbiesResult = function(data) {
@@ -19,9 +21,9 @@ controllers.controller('HomeCtrl', [
 				$scope.game.users = data.users;
 			};
 
-			WebSocketManagerService.register(ACTION.LIST_LOBBIES).then(
+			WebSocketManagerService.register(ACTION.LIST_LOBBIES).then(null, null, 
 					checkListLobbiesResult);
-			WebSocketManagerService.register(ACTION.LIST_USERS).then(
+			WebSocketManagerService.register(ACTION.LIST_USERS).then(null, null, 
 					checkListUsersResult);
 
 			WebSocketManagerService.send({
@@ -33,16 +35,22 @@ controllers.controller('HomeCtrl', [
 			});
 			
 			var checkJoinLobbyResult = function(result){
-				console.log('Join success');
+				if(result.state === STATUT.OK){
+					$rootScope.lobby = result.lobby;
+					$state.go('lobby');
+					console.log('Join success');
+				}else{
+					console.error('can\'t join');
+				}
 			};
-			WebSocketManagerService.register(ACTION.JOIN_LOBBY).then(
+			WebSocketManagerService.register(ACTION.JOIN_LOBBY).then(null, null, 
 					checkJoinLobbyResult);
 			
 			$scope.joinLobby = function(uid){
 				WebSocketManagerService.send({
 					action : ACTION.JOIN_LOBBY,
 					params : {
-						lobby : uid
+						uid : uid
 					}
 				});
 			};

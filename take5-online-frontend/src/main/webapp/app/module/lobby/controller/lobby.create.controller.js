@@ -6,15 +6,17 @@ var controllers = angular.module('take5Controllers.lobby.create', []);
 
 controllers.controller('LobbyCreateCtrl', [
 		'$scope',
+		'$rootScope', 
 		'WebSocketManagerService',
 		'ACTION',
 		'$state',
 		'STATUT',
-		function($scope, WebSocketManagerService, ACTION, $state, STATUT) {
-			$scope.lobby = {};
+		function($scope, $rootScope, WebSocketManagerService, ACTION, $state, STATUT) {
+			$rootScope.lobby = {};
 			
 			var checkCreationResultResult = function(data){
 				if(data.state === STATUT.OK){
+					$rootScope.lobby = data.lobby;
 					$state.go('lobby');
 				}else{
 					console.error('error during creation');
@@ -22,7 +24,7 @@ controllers.controller('LobbyCreateCtrl', [
 			};
 			
 			$scope.createLobby = function(){
-				WebSocketManagerService.register(ACTION.CREATE_LOBBY, true).then(checkCreationResultResult);
+				WebSocketManagerService.register(ACTION.CREATE_LOBBY, true).then(null, null, checkCreationResultResult);
 				
 				var data = {
 					action : ACTION.CREATE_LOBBY,
