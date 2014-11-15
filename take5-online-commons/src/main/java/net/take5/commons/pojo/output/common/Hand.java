@@ -11,32 +11,32 @@ import java.util.List;
 public class Hand
 {
     /** Carte sélectionnée */
-    private Integer pickedCard;
+    private Card pickedCard;
 
     /** Cartes courantes */
-    private List<Integer> cards;
+    private List<Card> cards;
 
     public Hand() {
         pickedCard = null;
-        cards = new ArrayList<Integer>(10);
+        cards = new ArrayList<Card>(10);
     }
 
-    public Integer getPickedCard()
+    public Card getPickedCard()
     {
         return this.pickedCard;
     }
 
-    public void setPickedCard(Integer pickedCard)
+    public void setPickedCard(Card pickedCard)
     {
         this.pickedCard = pickedCard;
     }
 
-    public List<Integer> getCards()
+    public List<Card> getCards()
     {
         return this.cards;
     }
 
-    public void setCards(List<Integer> cards)
+    public void setCards(List<Card> cards)
     {
         this.cards = cards;
     }

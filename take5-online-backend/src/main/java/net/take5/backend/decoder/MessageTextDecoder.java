@@ -7,11 +7,17 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
 import net.take5.commons.pojo.input.AbstractParams;
+import net.take5.commons.pojo.input.InputAction;
 import net.take5.commons.pojo.input.Message;
+import net.take5.commons.pojo.input.params.CreateLobbyParams;
+import net.take5.commons.pojo.input.params.JoinLobbyParams;
+import net.take5.commons.pojo.input.params.LoginParams;
+import net.take5.commons.pojo.input.params.QuitLobbyParams;
 
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 
 public class MessageTextDecoder implements Decoder.Text<Message<AbstractParams>>
 {
@@ -23,6 +29,10 @@ public class MessageTextDecoder implements Decoder.Text<Message<AbstractParams>>
 
     static {
         mapper = new ObjectMapper();
+        // enregistrement des types de paramètres attentus dans la requête
+        mapper.registerSubtypes(new NamedType(LoginParams.class, InputAction.LOGIN.name()), new NamedType(
+                CreateLobbyParams.class, InputAction.CREATE_LOBBY.name()), new NamedType(JoinLobbyParams.class,
+                InputAction.JOIN_LOBBY.name()), new NamedType(QuitLobbyParams.class, InputAction.QUIT_LOBBY.name()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package net.take5.commons.pojo.output.common;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,14 +11,22 @@ import java.util.List;
 public class GameBoard
 {
     /** Plateau du jeu représenté par une matrice (généralement 4 x 6) */
-    private List<List<Integer>> board;
+    private List<List<Card>> board;
 
-    public List<List<Integer>> getBoard()
+    public GameBoard() {
+        board = new ArrayList<List<Card>>(4);
+
+        for (int i = 0; i < 4; i++) {
+            board.add(new ArrayList<Card>());
+        }
+    }
+
+    public List<List<Card>> getBoard()
     {
         return this.board;
     }
 
-    public void setBoard(List<List<Integer>> board)
+    public void setBoard(List<List<Card>> board)
     {
         this.board = board;
     }

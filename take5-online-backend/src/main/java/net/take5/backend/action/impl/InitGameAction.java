@@ -65,6 +65,7 @@ public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> i
         notifyInitGame(lobby);
 
         response.setHand(user.getHand());
+        response.setGameBoard(lobby.getGameBoard());
     }
 
     /**

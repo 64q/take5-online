@@ -19,7 +19,10 @@ import org.springframework.stereotype.Component;
  * 
  * @author Quentin
  * 
- * @param <T>
+ * @param <P>
+ *            type de paramètres reçus de l'action
+ * @param <R>
+ *            type de réponse à apporter à la requête en entrée
  */
 @Component
 public abstract class AbstractAction<P extends AbstractParams, R extends AbstractResponse> implements Action<P>

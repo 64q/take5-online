@@ -26,15 +26,14 @@ public class Lobby
     /** Etat du lobby */
     private LobbyState state;
 
-    public void setState(LobbyState state)
-    {
-        this.state = state;
-    }
+    /** Plateau de jeu */
+    private GameBoard gameBoard;
 
     public Lobby() {
         uid = UUID.randomUUID();
         users = new HashSet<User>();
         state = LobbyState.WAITING;
+        gameBoard = null;
     }
 
     public LobbyState getState()
@@ -90,5 +89,20 @@ public class Lobby
     public boolean isEmpty()
     {
         return this.users.isEmpty();
+    }
+
+    public GameBoard getGameBoard()
+    {
+        return this.gameBoard;
+    }
+
+    public void setState(LobbyState state)
+    {
+        this.state = state;
+    }
+
+    public void setGameBoard(GameBoard gameBoard)
+    {
+        this.gameBoard = gameBoard;
     }
 }

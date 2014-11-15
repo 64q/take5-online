@@ -14,6 +14,9 @@ import net.take5.commons.pojo.output.AbstractResponse;
  * réception d'un {@link Message} de la part d'un utilisateur
  * 
  * @author Quentin
+ * 
+ * @param <T>
+ *            type de paramètre transmis par l'action reçue
  */
 public interface Action<T extends AbstractParams>
 {
