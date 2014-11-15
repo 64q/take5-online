@@ -100,7 +100,7 @@ public class Take5EngineImpl implements Take5Engine
         }
 
         // règle spéciale 55
-        if (value == 55) {
+        if (value.equals(55)) {
             card.setOxHeads(7);
         }
 
