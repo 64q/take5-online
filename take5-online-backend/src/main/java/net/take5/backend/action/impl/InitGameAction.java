@@ -61,11 +61,12 @@ public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> i
         // Lancement de l'appel asynchrone de la résolution du tour
         asyncExecutor.performEndTurn(lobby, 45000L);
 
+        response.setGameBoard(lobby.getGameBoard());
+
         // Notification envoyée aux autres participants que la partie a démarrée
         notifyInitGame(lobby);
 
         response.setHand(user.getHand());
-        response.setGameBoard(lobby.getGameBoard());
     }
 
     /**
