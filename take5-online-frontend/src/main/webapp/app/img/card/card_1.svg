@@ -9,12 +9,12 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="232.22148"
-   height="303"
+   viewbox="0 0 208 303"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="test.svg">
+   sodipodi:docname="card_1.svg"
+   >
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="335.68973"
-     inkscape:cy="178.32484"
+     inkscape:zoom="0.9899495"
+     inkscape:cx="653.33694"
+     inkscape:cy="104.07258"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -55,7 +55,7 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(13.075176,0.19388325)">
+     transform="translate(-1.375,0.1875)">
     <path
        inkscape:connector-curvature="0"
        id="path5"
@@ -63,7 +63,7 @@
        style="fill:#ffffff;fill-rule:nonzero;stroke:#000000;stroke-width:0.62243235;stroke-miterlimit:4" />
     <text
        xml:space="preserve"
-       style="font-size:27.47598839000000100px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none"
+       style="font-size:27.47598839px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
        x="7.4412885"
        y="26.043797"
        id="text2985"
@@ -73,10 +73,10 @@
          sodipodi:role="line"
          id="tspan2987"
          x="7.4412885"
-         y="26.043797">{{card}}</tspan></text>
+         y="26.043797">{{card.value}}</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:28.06592751000000200px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none"
+       style="font-size:28.06592751px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
        x="-219.88493"
        y="-255.53513"
        id="text2985-1"
@@ -86,7 +86,7 @@
          sodipodi:role="line"
          id="tspan2987-7"
          x="-219.88493"
-         y="-255.53513">{{card}}</tspan></text>
+         y="-255.53513">{{card.value}}</tspan></text>
     <g
        id="g3027"
        transform="matrix(0.07294924,0,0,-0.07310541,-11.93458,244.50291)"
@@ -99,7 +99,7 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:82.98651886000000400px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:931.99996947999966000%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
+       style="font-size:82.98651886px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:931.99996948%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:none"
        x="103.69497"
        y="166.95859"
        id="text3037"
@@ -109,10 +109,10 @@
          sodipodi:role="line"
          id="tspan3039"
          x="103.69497"
-         y="166.95859">{{card}}</tspan></text>
+         y="166.95859">{{card.value}}</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:27.47598839000000100px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none"
+       style="font-size:27.47598839px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
        x="208.48848"
        y="24.138597"
        id="text2985-4"
@@ -122,10 +122,10 @@
          sodipodi:role="line"
          id="tspan2987-0"
          x="208.48848"
-         y="24.138597">{{card}}</tspan></text>
+         y="24.138597">{{card.value}}</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:28.06592751000000200px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffffff;fill-opacity:1;stroke:none"
+       style="font-size:28.06592751px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#000000;fill-opacity:1;stroke:none"
        x="-8.6365108"
        y="-255.37489"
        id="text2985-1-9"
@@ -134,8 +134,8 @@
          class="small"
          sodipodi:role="line"
          id="tspan2987-7-4"
-         x="-8.6365108"
-         y="-255.37489">{{card}}</tspan></text>
+         x="-8.6365147"
+         y="-255.37489">{{card.value}}</tspan></text>
     <g
        id="g3027-8"
        transform="matrix(0.00733954,0,0,-0.00750538,92.472816,25.852777)"
@@ -144,7 +144,7 @@
          id="path3029-8"
          d="m 2405.2085,2521.1469 c -3,-5 -1,-19 5,-30 22,-41 72,-257 77,-330 3,-41 7,-100 9,-130 7,-86 -6,-101 -106,-127 -106,-27 -251,-31 -270,-8 -11,13 -8,21 20,50 39,41 56,85 70,180 6,39 18,103 27,143 11,47 13,76 7,82 -6,6 -36,-4 -84,-30 -41,-22 -85,-40 -96,-40 -12,0 -27,-7 -35,-16 -7,-9 -52,-36 -100,-60 l -88,-43 -27,-85 c -35,-108 -44,-111 -157,-55 l -83,41 -55,-35 c -53,-34 -70,-41 -96,-38 -7,0 -24,42 -39,91 -24,80 -31,93 -63,112 -20,13 -87,58 -149,102 -65,45 -117,75 -122,70 -5,-5 -18,-85 -30,-178 -23.00003,-190 -28.00003,-166 54,-253 23,-25 36,-47 33,-56 -13,-33 -211.00004,-35 -314.00004,-3 -72,23 -87,40 -80,90 12,81 78,287 132,407 71,160 62,172 -48,59 -166,-171 -265,-295 -316,-397 -57,-114 -132,-376 -113,-395 26,-26 280,-83 427,-96 97,-9 100,-16 55,-116 -16,-37 -30,-73 -30,-80 0,-7 43,-59 95,-117 53,-57 103.00004,-120 111.00004,-139 8,-19 16,-70 17,-113.00004 2,-90 12,-78 -132.00004,-170 -104,-67 -104,-67 -72,-180 30,-102 66,-173 127,-249 l 55.00004,-69 73,7 c 88,8 101,-2 111,-78 9,-76 24,-126 38,-135 77,-46.999997 466,-49.999997 522,-3 16,13 29,87 30,160 0,54 1,55 30,58 17,2 59,-6 95,-18 l 64,-20 38,42 c 48,53 189,334 191,380 2,32 0,34 -140,107 -105,56 -143,81 -147,98 -4,12 3,46 14,75 19,51.00004 24,56.00004 125,116.00004 57,35 114,71 125,80 l 21,17 -21,125 c -11,69 -22,139 -25,157 -9,52 20,73 103,73 79,0 202,14 322,36 94,18 267,69 287,86 8,6 13,34 13,69 0,106 -128,398 -235,539 -57,74 -223,250 -237,250 -4,0 -10,-4 -13,-10 z"
          inkscape:connector-curvature="0"
-         style="fill:#4e0080;fill-opacity:1" />
+         style="fill:#000000;fill-opacity:1" />
     </g>
     <g
        id="g3027-8-2"
@@ -154,7 +154,7 @@
          id="path3029-8-4"
          d="m 2405.2085,2521.1469 c -3,-5 -1,-19 5,-30 22,-41 72,-257 77,-330 3,-41 7,-100 9,-130 7,-86 -6,-101 -106,-127 -106,-27 -251,-31 -270,-8 -11,13 -8,21 20,50 39,41 56,85 70,180 6,39 18,103 27,143 11,47 13,76 7,82 -6,6 -36,-4 -84,-30 -41,-22 -85,-40 -96,-40 -12,0 -27,-7 -35,-16 -7,-9 -52,-36 -100,-60 l -88,-43 -27,-85 c -35,-108 -44,-111 -157,-55 l -83,41 -55,-35 c -53,-34 -70,-41 -96,-38 -7,0 -24,42 -39,91 -24,80 -31,93 -63,112 -20,13 -87,58 -149,102 -65,45 -117,75 -122,70 -5,-5 -18,-85 -30,-178 -23.00003,-190 -28.00003,-166 54,-253 23,-25 36,-47 33,-56 -13,-33 -211.00004,-35 -314.00004,-3 -72,23 -87,40 -80,90 12,81 78,287 132,407 71,160 62,172 -48,59 -166,-171 -265,-295 -316,-397 -57,-114 -132,-376 -113,-395 26,-26 280,-83 427,-96 97,-9 100,-16 55,-116 -16,-37 -30,-73 -30,-80 0,-7 43,-59 95,-117 53,-57 103.00004,-120 111.00004,-139 8,-19 16,-70 17,-113.00004 2,-90 12,-78 -132.00004,-170 -104,-67 -104,-67 -72,-180 30,-102 66,-173 127,-249 l 55.00004,-69 73,7 c 88,8 101,-2 111,-78 9,-76 24,-126 38,-135 77,-46.999997 466,-49.999997 522,-3 16,13 29,87 30,160 0,54 1,55 30,58 17,2 59,-6 95,-18 l 64,-20 38,42 c 48,53 189,334 191,380 2,32 0,34 -140,107 -105,56 -143,81 -147,98 -4,12 3,46 14,75 19,51.00004 24,56.00004 125,116.00004 57,35 114,71 125,80 l 21,17 -21,125 c -11,69 -22,139 -25,157 -9,52 20,73 103,73 79,0 202,14 322,36 94,18 267,69 287,86 8,6 13,34 13,69 0,106 -128,398 -235,539 -57,74 -223,250 -237,250 -4,0 -10,-4 -13,-10 z"
          inkscape:connector-curvature="0"
-         style="fill:#4e0080;fill-opacity:1" />
+         style="fill:#000000;fill-opacity:1" />
     </g>
   </g>
 </svg>
