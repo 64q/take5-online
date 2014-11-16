@@ -54,5 +54,4 @@ controllers.controller('HomeCtrl', [
 					}
 				});
 			};
-
 		} ]);

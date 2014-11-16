@@ -7,7 +7,9 @@ var services = angular.module('take5Services.websocket', []);
 services.factory('WebSocketManagerService', [
 		'$state',
 		'$rootScope',
-		'$q', 'CODE_RESULTAT', 'STATUT',
+		'$q',
+		'CODE_RESULTAT',
+		'STATUT',
 		function($state, $rootScope, $q, CODE_RESULTAT, STATUT) {
 			var ws = new WebSocket(
 					"ws://localhost:8080/take5-online-backend/game");
@@ -26,7 +28,7 @@ services.factory('WebSocketManagerService', [
 						&& result.code === CODE_RESULTAT.NOT_LOGGED) {
 					$state.go('login');
 				} else if (registration[result.action]) {
-					//dispatch message
+					// dispatch message
 					$rootScope.$apply(registration[result.action].defer
 							.notify(result));
 					if (registration[result.action].unique) {
@@ -40,12 +42,12 @@ services.factory('WebSocketManagerService', [
 				send : function(data) {
 					if (wsReady) {
 						console.log(data);
-						if(!data.params){
+						if (!data.params) {
 							data.params = {};
 						}
 						ws.send(JSON.stringify(data));
 					} else {
-						//websocket not ready
+						// websocket not ready
 						$state.go('login');
 					}
 				},
