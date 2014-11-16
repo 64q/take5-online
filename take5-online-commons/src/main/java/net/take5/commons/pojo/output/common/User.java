@@ -36,6 +36,10 @@ public class User
 
     public Hand getHand()
     {
+        if (hand == null) {
+            this.hand = new Hand();
+        }
+
         return this.hand;
     }
 
@@ -57,7 +61,7 @@ public class User
 
     public User() {
         lastActivity = new Date();
-        hand = new Hand();
+        hand = null;
     }
 
     public Date getLastActivity()
@@ -136,5 +140,13 @@ public class User
         } else if (!this.username.equals(other.username))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "User [username=" + this.username + ", wonGames=" + this.wonGames + ", lostGames=" + this.lostGames
+                + ", currentLobby=" + this.currentLobby + ", lastActivity=" + this.lastActivity + ", session="
+                + this.session + ", hand=" + this.hand + "]";
     }
 }

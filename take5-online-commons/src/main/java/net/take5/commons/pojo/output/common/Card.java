@@ -1,6 +1,6 @@
 package net.take5.commons.pojo.output.common;
 
-public class Card
+public class Card implements Comparable<Card>
 {
     /** Valeur de la carte */
     private Integer value;
@@ -28,4 +28,15 @@ public class Card
         this.oxHeads = oxHeads;
     }
 
+    @Override
+    public int compareTo(Card o)
+    {
+        return this.value.compareTo(o.getValue());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Card [value=" + this.value + ", oxHeads=" + this.oxHeads + "]";
+    }
 }

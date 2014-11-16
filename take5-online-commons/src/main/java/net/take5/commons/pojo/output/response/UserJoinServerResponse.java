@@ -3,9 +3,9 @@ package net.take5.commons.pojo.output.response;
 import net.take5.commons.pojo.output.AbstractResponse;
 import net.take5.commons.pojo.output.common.User;
 
-public class UserQuitLobby extends AbstractResponse
+public class UserJoinServerResponse extends AbstractResponse
 {
-    /** Utilisateur ayant quitté le lobby */
+    /** Utilisateur ayant rejoint le serveur */
     private User user;
 
     public User getUser()
@@ -17,4 +17,5 @@ public class UserQuitLobby extends AbstractResponse
     {
         this.user = user;
     }
+
 }

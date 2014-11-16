@@ -52,6 +52,8 @@ public class GameServerEndpoint
     @OnClose
     public void closedConnection(Session session)
     {
+        LOG.info("Déconnexion de la session " + session.getId() + " du serveur");
+
         dispatcher.remove(session);
     }
 

@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test WebSockets</title>
 <script
-  src="//cdnjs.cloudflare.com/ajax/libs/json2/20140204/json2.min.js"></script>
+  src="/take5-online-backend/json2.min.js"></script>
 <script>
   window.addEventListener("load", function() {
     var socket = new WebSocket("ws://localhost:8080/take5-online-backend/game");
@@ -20,6 +20,8 @@
       console.log(event);
       
       var data = JSON.parse(event.data);
+      
+      document.querySelector("#json").innerHTML = JSON.stringify(data, undefined, 2);
       
       if (data.state == "KO") {
         printMessage(data.reason); return;
@@ -77,14 +79,23 @@
       } else if (data.action == "INIT_GAME") {
         console.info("Partie démarrée");
       } else if (data.action == "END_TURN") {
-        console.info("Fin du tour, carte choisie = " + data.card + ", choix automatique = " + data.autoChoice);
-        printNotification("Carte choisie = " + data.card);
+        console.info("Fin du tour, carte choisie = " + data.hand.pickedCard.value + ", choisie automatiquement = " + data.hand.pickedAuto);
+        console.log(data.gameBoard);
+        printNotification("Carte choisie = " + data.hand.pickedCard.value);
       } else if (data.action == "QUIT_LOBBY") {
         console.info("Le lobby a été quitté");
       } else if (data.action == "USER_JOIN_LOBBY") {
         printNotification("L'utilisateur " + data.user.username + " a rejoint le lobby");
       } else if (data.action == "USER_QUIT_LOBBY") {
         printNotification("L'utilisateur " + data.user.username + " a quitté le lobby");
+      } else if (data.action == "USER_JOIN_SERVER") {
+        printNotification("L'utilisateur " + data.user.username + " a rejoint le serveur");
+      } else if (data.action == "USER_QUIT_SERVER") {
+        printNotification("L'utilisateur " + data.user.username + " a quitté le serveur");
+      } else if (data.action == "REMOVE_COLUMN_CHOICE") {
+        printNotification("L'utilisateur " + data.user.username + " a retiré la colonne index = " + data.column);
+      } else if (data.action == "REMOVE_COLUMN") {
+        printNotification("L'utilisateur " + data.user.username + " doit choisir une colonne à retirer");
       }
     };
 
@@ -192,6 +203,8 @@
 <body>
   <h1>Test WebSockets</h1>
 
+  <pre id="json" style="float: right; border: 1px solid black; width: 800px; height: 500px; overflow: scroll;"></pre>    
+    
   <div class="actions">
     Dernière action : <span style="color:red;" id="actions"></span>
   </div> 

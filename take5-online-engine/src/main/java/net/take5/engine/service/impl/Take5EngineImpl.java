@@ -1,8 +1,12 @@
 package net.take5.engine.service.impl;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.Stack;
+import java.util.TreeMap;
 
 import net.take5.commons.pojo.output.common.Card;
 import net.take5.commons.pojo.output.common.GameBoard;
@@ -11,11 +15,16 @@ import net.take5.commons.pojo.output.common.LobbyState;
 import net.take5.commons.pojo.output.common.User;
 import net.take5.engine.service.Take5Engine;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Take5EngineImpl implements Take5Engine
 {
+    /** Logger */
+    private static final Logger LOG = Logger.getLogger(Take5EngineImpl.class);
+
     @Override
     public Lobby createLobby(String name, User creator)
     {
@@ -125,5 +134,116 @@ public class Take5EngineImpl implements Take5Engine
         }
 
         lobby.setGameBoard(gameBoard);
+    }
+
+    @Override
+    public void resolveTurn(Lobby lobby)
+    {
+        SortedMap<Card, User> selectedCards = new TreeMap<Card, User>();
+
+        for (User user : lobby.getUsers()) {
+            selectedCards.put(user.getHand().getPickedCard(), user);
+        }
+
+        // le parcours des cartes est effectué dans l'ordre croissant selon la
+        // valeur de la carte
+        Iterator<Map.Entry<Card, User>> it = selectedCards.entrySet().iterator();
+
+        while (it.hasNext()) {
+            List<Card> selectedCol = null;
+            Map.Entry<Card, User> entry = it.next();
+
+            for (List<Card> col : lobby.getGameBoard().getBoard()) {
+                // dans le cas où la colonne est vide, celle ci est forcément
+                // sélectionnée pour la carte à placer
+                if (col.size() == 0) {
+                    selectedCol = col;
+                } else if (entry.getKey().getValue().intValue() > col.get(col.size() - 1).getValue().intValue()
+                        && selectedCol == null) {
+                    selectedCol = col;
+                } else {
+                    // lorsque la diff avec la col sélectionnée est inférieure,
+                    // on réaffecte à la colonne courante
+                    if (entry.getKey().getValue().intValue() > col.get(col.size() - 1).getValue().intValue()
+                            && entry.getKey().getValue().intValue() - col.get(col.size() - 1).getValue().intValue() < entry
+                                    .getKey().getValue().intValue()
+                                    - selectedCol.get(selectedCol.size() - 1).getValue().intValue()) {
+                        selectedCol = col;
+                    }
+                }
+
+            }
+
+            if (selectedCol.size() >= 5) {
+                LOG.info("L'utilisateur " + entry.getValue() + " prend une ligne");
+                // le joueur prend la ligne !
+                entry.getValue().getHand().getTakenCards().addAll(selectedCol);
+                selectedCol.clear();
+            }
+
+            selectedCol.add(entry.getKey());
+
+            // suppression de la carte courante de la main du joueur
+            entry.getValue().getHand().getCards().remove(entry.getKey());
+        }
+    }
+
+    @Override
+    public Boolean determineRemoveColumn(Lobby lobby, Card card)
+    {
+        Boolean notInsertable = true;
+        List<List<Card>> board = lobby.getGameBoard().getBoard();
+
+        for (List<Card> col : board) {
+            if (col.get(col.size() - 1).compareTo(card) <= 0) {
+                notInsertable = false;
+            }
+        }
+
+        if (notInsertable) {
+            LOG.info("La carte " + card + " n'est pas insérable, une colonne doit être retirée");
+        }
+
+        return notInsertable;
+    }
+
+    @Override
+    public void resolvePickedCards(Lobby lobby)
+    {
+        for (User user : lobby.getUsers()) {
+            if (user.getHand().getPickedCard() == null) {
+                Card selectedCard = user.getHand().getCards().get(0);
+
+                user.getHand().setPickedCard(selectedCard);
+                user.getHand().setPickedAuto(true);
+
+                LOG.info("Choix automatique d'une carte " + selectedCard + " pour le joueur " + user);
+            }
+        }
+    }
+
+    @Override
+    public Boolean resolveRemoveColumn(Lobby lobby, User user)
+    {
+        Boolean notEmpty = false;
+        GameBoard board = lobby.getGameBoard();
+
+        for (List<Card> cards : board.getBoard()) {
+            if (CollectionUtils.isEmpty(cards)) {
+                notEmpty = true;
+
+                LOG.debug("Une ligne a été supprimée en amont");
+            }
+        }
+
+        // si jamais une des ligne n'a pas été vidée, on prend la première
+        if (!notEmpty) {
+            user.getHand().getTakenCards().addAll(board.getBoard().get(0));
+            board.getBoard().get(0).clear();
+
+            LOG.debug("Une ligne va être supprimée automatiquement");
+        }
+
+        return !notEmpty;
     }
 }

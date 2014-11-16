@@ -14,6 +14,7 @@ import net.take5.commons.pojo.output.common.OutputAction;
 import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.LoginResponse;
+import net.take5.commons.pojo.output.response.UserJoinServerResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,27 @@ public class LoginAction extends AbstractAction<LoginParams, LoginResponse> impl
         user.setWonGames(0L);
         user.setLostGames(0L);
 
+        // notifie les autres utilisateurs déjà connectés
+        notifyOtherUsers(user);
+
         // ajout à la liste des utilisateurs connectés
         serverState.getUsers().put(session, user);
 
         response.setState(State.OK);
         response.setUsername(user.getUsername());
+    }
+
+    private void notifyOtherUsers(User newUser)
+    {
+        UserJoinServerResponse notification = new UserJoinServerResponse();
+
+        notification.setState(State.OK);
+        notification.setAction(OutputAction.USER_JOIN_SERVER);
+        notification.setUser(newUser);
+
+        for (User user : serverState.getUsers().values()) {
+            user.getSession().getAsyncRemote().sendObject(notification);
+        }
     }
 
     @Override

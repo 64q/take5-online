@@ -16,9 +16,29 @@ public class Hand
     /** Cartes courantes */
     private List<Card> cards;
 
+    /** Indique si la carte prise à été déterminée automatiquement */
+    private Boolean pickedAuto;
+
+    /** Cartes prises par le joueur */
+    private List<Card> takenCards;
+
     public Hand() {
         pickedCard = null;
         cards = new ArrayList<Card>(10);
+    }
+
+    public List<Card> getTakenCards()
+    {
+        if (takenCards == null) {
+            takenCards = new ArrayList<Card>();
+        }
+
+        return this.takenCards;
+    }
+
+    public void setTakenCards(List<Card> takenCards)
+    {
+        this.takenCards = takenCards;
     }
 
     public Card getPickedCard()
@@ -41,4 +61,13 @@ public class Hand
         this.cards = cards;
     }
 
+    public Boolean getPickedAuto()
+    {
+        return this.pickedAuto;
+    }
+
+    public void setPickedAuto(Boolean pickedAuto)
+    {
+        this.pickedAuto = pickedAuto;
+    }
 }

@@ -11,6 +11,10 @@ import net.take5.backend.server.GameServer;
 import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.Message;
 import net.take5.commons.pojo.output.AbstractResponse;
+import net.take5.commons.pojo.output.common.OutputAction;
+import net.take5.commons.pojo.output.common.State;
+import net.take5.commons.pojo.output.common.User;
+import net.take5.commons.pojo.output.response.UserQuitServerResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -47,6 +51,19 @@ public class GameServerImpl implements GameServer
     @Override
     public void remove(Session session)
     {
+        // notification aux autres utilisateurs que le joueur est parti
+        User oldUser = serverState.getUser(session);
+
+        UserQuitServerResponse notification = new UserQuitServerResponse();
+
+        notification.setState(State.OK);
+        notification.setAction(OutputAction.USER_QUIT_SERVER);
+        notification.setUser(oldUser);
+
         serverState.remove(session);
+
+        for (User user : serverState.getUsers().values()) {
+            user.getSession().getAsyncRemote().sendObject(notification);
+        }
     }
 }
