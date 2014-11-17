@@ -32,8 +32,10 @@ controllers.controller('GameCtrl', [
 			
 			
 			var checkRemoveColumn = function(data) {
-				console.log('En attente d\'un choix de ligne');
-				$scope.mustRemoveColumn = true;
+				if($rootScope.username === data.user.username){
+					console.log('En attente d\'un choix de ligne');
+					$scope.mustRemoveColumn = true;
+				}
 			};
 			
 			WebSocketManagerService.register(ACTION.REMOVE_COLUMN).then(null, null, checkRemoveColumn);

@@ -108,6 +108,10 @@ svg {
     filter: drop-shadow( 0px 0px 10px rgba(28,42,150,1) );
 }
 
+.choosable-line .card-container {
+	transition: all 0.5s;
+	cursor: pointer;
+}
 .choosable-line .card-container:hover {
 	-webkit-filter: drop-shadow( 0px 0px 10px rgba(28,42,150,1) );
     filter: drop-shadow( 0px 0px 10px rgba(28,42,150,1) );
