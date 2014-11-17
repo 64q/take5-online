@@ -9,10 +9,12 @@ import javax.websocket.EndpointConfig;
 import net.take5.commons.pojo.input.AbstractParams;
 import net.take5.commons.pojo.input.InputAction;
 import net.take5.commons.pojo.input.Message;
+import net.take5.commons.pojo.input.params.CardChoiceParams;
 import net.take5.commons.pojo.input.params.CreateLobbyParams;
 import net.take5.commons.pojo.input.params.JoinLobbyParams;
 import net.take5.commons.pojo.input.params.LoginParams;
 import net.take5.commons.pojo.input.params.QuitLobbyParams;
+import net.take5.commons.pojo.input.params.RemoveColumnParams;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +34,9 @@ public class MessageTextDecoder implements Decoder.Text<Message<AbstractParams>>
         // enregistrement des types de paramètres attentus dans la requête
         mapper.registerSubtypes(new NamedType(LoginParams.class, InputAction.LOGIN.name()), new NamedType(
                 CreateLobbyParams.class, InputAction.CREATE_LOBBY.name()), new NamedType(JoinLobbyParams.class,
-                InputAction.JOIN_LOBBY.name()), new NamedType(QuitLobbyParams.class, InputAction.QUIT_LOBBY.name()));
+                InputAction.JOIN_LOBBY.name()), new NamedType(QuitLobbyParams.class, InputAction.QUIT_LOBBY.name()),
+                new NamedType(CardChoiceParams.class, InputAction.CARD_CHOICE.name()), new NamedType(
+                        RemoveColumnParams.class, InputAction.REMOVE_COLUMN.name()));
     }
 
     @Override
