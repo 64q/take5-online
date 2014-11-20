@@ -5,6 +5,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Test WebSockets</title>
+<style type="text/css">
+    table {
+        border: 1px solid black;
+        margin: 10px 0 10px 0;
+    }
+    table#gameboard tr td {
+        height: 45px;
+        width: 45px;
+        border: 1px solid black;
+    }
+    table#hand tr td {
+        height: 45px;
+        width: 45px;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+</style>
 <script
   src="/take5-online-backend/json2.min.js"></script>
 <script>
@@ -78,10 +95,32 @@
         printNotification(data.notification);
       } else if (data.action == "INIT_GAME") {
         console.info("Partie démarrée");
+        
+        var buttons = document.querySelectorAll(".remove-column");
+        
+        for (var i = 0; i < buttons.length; i++) {
+          (function(i) {
+            buttons[i].addEventListener("click", function(event) {
+              var obj = {
+                  action: "REMOVE_LINE",
+                  params: {
+                    line: i
+                  }
+              };
+              
+              console.info("Suppression de la colonne " + i);
+              
+              socket.send(JSON.stringify(obj));
+            });
+          })(i);
+        }
+        
+        drawBoard(data);
       } else if (data.action == "END_TURN") {
         console.info("Fin du tour, carte choisie = " + data.hand.pickedCard.value + ", choisie automatiquement = " + data.hand.pickedAuto);
         console.log(data.gameBoard);
         printNotification("Carte choisie = " + data.hand.pickedCard.value);
+        drawBoard(data);
       } else if (data.action == "QUIT_LOBBY") {
         console.info("Le lobby a été quitté");
       } else if (data.action == "USER_JOIN_LOBBY") {
@@ -92,9 +131,9 @@
         printNotification("L'utilisateur " + data.user.username + " a rejoint le serveur");
       } else if (data.action == "USER_QUIT_SERVER") {
         printNotification("L'utilisateur " + data.user.username + " a quitté le serveur");
-      } else if (data.action == "REMOVE_COLUMN_CHOICE") {
-        printNotification("L'utilisateur " + data.user.username + " a retiré la colonne index = " + data.column);
-      } else if (data.action == "REMOVE_COLUMN") {
+      } else if (data.action == "REMOVE_LINE") {
+        printNotification("L'utilisateur " + data.user.username + " a retiré la colonne index = " + data.line);
+      } else if (data.action == "REMOVE_LINE_CHOICE") {
         printNotification("L'utilisateur " + data.user.username + " doit choisir une colonne à retirer");
       }
     };
@@ -189,6 +228,46 @@
         });
       }
     }
+    
+    function drawBoard(data) {
+      var cells = document.querySelectorAll("#gameboard tr td");
+      
+      var k = -1, j = -1;
+      
+      for (var i = 0; i < cells.length; i++) {
+        if (i % 5 == 0) {
+          k = k + 1;
+          j = 0;
+        }
+        if (data.gameBoard.board[k][j]) {
+          cells[i].innerHTML = data.gameBoard.board[k][j].value;
+        }
+
+        j++;
+      }
+      
+      var cards = document.querySelectorAll("#hand tr td");
+      
+      for (var i = 0; i < data.hand.cards.length; i++) {
+        (function(i) {
+          cards[i].style.background = "white";
+          cards[i].innerHTML = data.hand.cards[i].value;
+          cards[i].addEventListener("click", function(event) {
+            var obj = {
+                action: "CARD_CHOICE",
+                params: {
+                  card: i,
+                }
+            };
+            
+            console.info("Carte " + i + " envoyée");
+            
+            socket.send(JSON.stringify(obj));
+            this.style.background = "yellow";
+          });
+        })(i);
+      }
+    }
   });
   
   function printMessage(msg) {
@@ -212,36 +291,61 @@
     Dernière notification : <span style="color:blue;" id="notifications"></span>
   </div> 
 
-  <h3>Test connexion pseudo</h3>
-  <p>
-    Pseudo : <input type="text" id="username" /><input type="button"
-      id="connect" value="Connexion" />
-  </p>
+  <table>
+    <tr>
+       <td>
+         <h3>Test connexion pseudo</h3>
+          <p>
+            Pseudo : <input type="text" id="username" /><input type="button"
+              id="connect" value="Connexion" />
+          </p>
+      </td>
+      <td>
+        <h3>Liste users</h3>
+        <p>
+          <input type="button" id="list-users" value="Récupérer les utilisateurs" />
+        </p>
+        <div id="users-list"></div>
+      </td>
+      <td>
+        <h3>Liste lobbies</h3>
+        <p>
+          <input type="button" id="list-lobbies" value="Récupérer les lobbies" />
+        </p>
+        <div id="lobbies-list"></div>
+      </td>
+      <td>
+        <h3>Créer lobby</h3>
+        <p>
+          Nom du lobby : <input type="text" id="lobby-name" /><input type="button" id="create-lobby" value="Créer lobby" />
+        </p>
+      </td>
+      <td>
+          <h3>Démarrer la partie</h3>
+          <p>
+            <input type="button" id="start-game" value="Démarrer la partie" />
+          </p>
+      </td>
+    </tr>
+  </table>
+   
+  <table id="gameboard">
+    <tr>
+        <td></td><td></td><td></td><td></td><td></td><th><input type="button" value="Supprimer" class="remove-column" /></th>
+    </tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><th><input type="button" value="Supprimer" class="remove-column" /></th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><th><input type="button" value="Supprimer" class="remove-column" /></th></tr>
+    <tr><td></td><td></td><td></td><td></td><td></td><th><input type="button" value="Supprimer" class="remove-column" /></th></tr>
+  </table>
 
-  <h3>Liste users</h3>
-  <p>
-    <input type="button" id="list-users" value="Récupérer les utilisateurs" />
-  </p>
-  <div id="users-list"></div>
-  
-  <h3>Liste lobbies</h3>
-  <p>
-    <input type="button" id="list-lobbies" value="Récupérer les lobbies" />
-  </p>
-  <div id="lobbies-list"></div>
-
-  <h3>Créer lobby</h3>
-  <p>
-    Nom du lobby : <input type="text" id="lobby-name" /><input type="button" id="create-lobby" value="Créer lobby" />
-  </p>
-  
-  <h3>Démarrer la partie</h3>
-  <p>
-    <input type="button" id="start-game" value="Démarrer la partie" />
-  </p>
+  <table id="hand">
+    <tr>
+        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+    </tr>
+  </table>
 
   <hr />
 
-  <em>Page de test JSP WebSockets - Quentin Lebourgeois - 2014</em>
+  <em>Page de test take5 JSP WebSockets</em>
 </body>
 </html>

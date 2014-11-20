@@ -16,6 +16,7 @@ import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.UserQuitServerResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameServerImpl implements GameServer
 {
+    /** Logger */
+    private static final Logger LOG = Logger.getLogger(GameServerImpl.class);
+
     /** Etat du serveur courant */
     @Autowired
     private ServerState serverState;
@@ -61,6 +65,8 @@ public class GameServerImpl implements GameServer
         notification.setUser(oldUser);
 
         serverState.remove(session);
+
+        LOG.info("L'utilisateur " + oldUser.getUsername() + " a quitté le serveur");
 
         for (User user : serverState.getUsers().values()) {
             user.getSession().getAsyncRemote().sendObject(notification);

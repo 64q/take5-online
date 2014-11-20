@@ -77,6 +77,12 @@ public class ServerState
 
             if (lobby != null) {
                 lobby.getUsers().remove(user);
+            }
+
+            // par mesure de précaution on va aussi parcourir les lobbies du
+            // serveur
+            for (Lobby serverLobby : lobbies) {
+                serverLobby.getUsers().remove(user);
 
                 if (lobby.getOwner().equals(user)) {
                     // si l'utilisateur courant est propriétaire du lobby, alors

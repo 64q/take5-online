@@ -59,7 +59,8 @@ public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> i
         gameEngine.newGame(lobby);
 
         // Lancement de l'appel asynchrone de la résolution du tour
-        asyncExecutor.performEndTurn(lobby, 45000L);
+        // attention, l'appel est déclenché ensuite toutes les 30 secondes
+        asyncExecutor.performEndTurn(lobby, 30000L);
 
         response.setGameBoard(lobby.getGameBoard());
 

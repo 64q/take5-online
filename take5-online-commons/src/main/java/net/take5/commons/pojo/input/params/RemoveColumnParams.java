@@ -4,16 +4,16 @@ import net.take5.commons.pojo.input.AbstractParams;
 
 public class RemoveColumnParams extends AbstractParams
 {
-    /** Index de la colonne à retirer */
-    private Integer column;
+    /** Index de la ligne à retirer */
+    private Integer line;
 
-    public Integer getColumn()
+    public Integer getLine()
     {
-        return this.column;
+        return this.line;
     }
 
-    public void setColumn(Integer column)
+    public void setLine(Integer column)
     {
-        this.column = column;
+        this.line = column;
     }
 }

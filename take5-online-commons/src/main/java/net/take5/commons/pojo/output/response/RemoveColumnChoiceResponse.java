@@ -8,17 +8,17 @@ public class RemoveColumnChoiceResponse extends AbstractResponse
     /** Utilisateur devant retirer une colonne */
     private User user;
 
-    /** Index de la colonne retirée */
-    private Integer column;
+    /** Index de la ligne retirée */
+    private Integer line;
 
-    public Integer getColumn()
+    public Integer getLine()
     {
-        return this.column;
+        return this.line;
     }
 
-    public void setColumn(Integer column)
+    public void setLine(Integer column)
     {
-        this.column = column;
+        this.line = column;
     }
 
     public User getUser()

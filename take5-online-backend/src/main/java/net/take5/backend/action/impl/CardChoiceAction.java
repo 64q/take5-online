@@ -16,12 +16,16 @@ import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.CardChoiceResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("CARD_CHOICE")
 public class CardChoiceAction extends AbstractAction<CardChoiceParams, CardChoiceResponse>
 {
+    /** Logger */
+    private static final Logger LOG = Logger.getLogger(CardChoiceAction.class);
+
     /** Etat du serveur */
     @Autowired
     private ServerState serverState;
@@ -40,6 +44,8 @@ public class CardChoiceAction extends AbstractAction<CardChoiceParams, CardChoic
         User user = serverState.getUser(session);
         Card pickedCard = user.getHand().getCards().get(cardIndex);
 
+        LOG.info("L'utilisateur " + user.getUsername() + " a choisi la carte " + pickedCard);
+
         user.getHand().setPickedAuto(false);
         user.getHand().setPickedCard(pickedCard);
 
@@ -54,7 +60,13 @@ public class CardChoiceAction extends AbstractAction<CardChoiceParams, CardChoic
         User user = serverState.getUser(session);
         Integer cardIndex = message.getParams().getCard();
 
-        if (cardIndex < 0 || cardIndex >= user.getHand().getCards().size()) {
+        if (cardIndex == null) {
+            response.setState(State.KO);
+            response.setCode(ErrorCode.INVALID_CARD);
+            isValid = false;
+        }
+
+        if (isValid && (cardIndex < 0 || cardIndex >= user.getHand().getCards().size())) {
             response.setState(State.KO);
             response.setCode(ErrorCode.INVALID_CARD);
             isValid = false;

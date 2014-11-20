@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import net.take5.backend.context.ServerState;
 import net.take5.backend.scheduler.AsyncExecutor;
 import net.take5.commons.pojo.output.common.Card;
 import net.take5.commons.pojo.output.common.Hand;
@@ -13,22 +14,22 @@ import net.take5.commons.pojo.output.common.LobbyState;
 import net.take5.commons.pojo.output.common.OutputAction;
 import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
+import net.take5.commons.pojo.output.response.EndGameResponse;
 import net.take5.commons.pojo.output.response.EndTurnResponse;
 import net.take5.commons.pojo.output.response.RemoveColumnChoiceResponse;
 import net.take5.commons.pojo.output.response.RemoveColumnResponse;
 import net.take5.engine.service.Take5Engine;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 @Component
 @EnableAsync
-public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
+public class AsyncExecutorImpl implements AsyncExecutor
 {
     /** Logger */
     private static final Logger LOG = Logger.getLogger(AsyncExecutorImpl.class);
@@ -37,9 +38,9 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
     @Autowired
     private Take5Engine gameEngine;
 
-    /** Source de messages */
+    /** Etat du serveur */
     @Autowired
-    private MessageSource messageSource;
+    private ServerState serverState;
 
     @Override
     @Async
@@ -48,6 +49,8 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
         if (timeout == null) {
             timeout = 30000L;
         }
+
+        boolean finishedGame = false;
 
         // attente de XX secondes avant la résolution
         try {
@@ -81,11 +84,12 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
             Hand savedHand = entry.getValue().getHand();
 
             notification.setState(State.OK);
-            notification.setAction(OutputAction.REMOVE_COLUMN);
+            notification.setAction(OutputAction.REMOVE_LINE_CHOICE);
             notification.setUser(entry.getValue());
 
             notification.getUser().setHand(null);
 
+            // envoi de la notification à tous les utilisateurs du lobby
             for (User user : lobby.getUsers()) {
                 user.getSession().getAsyncRemote().sendObject(notification);
             }
@@ -102,16 +106,7 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
             }
 
             if (gameEngine.resolveRemoveColumn(lobby, entry.getValue())) {
-                RemoveColumnChoiceResponse choiceResponse = new RemoveColumnChoiceResponse();
-
-                choiceResponse.setState(State.OK);
-                choiceResponse.setAction(OutputAction.REMOVE_COLUMN_CHOICE);
-                choiceResponse.setUser(entry.getValue());
-                choiceResponse.setColumn(0);
-
-                for (User user : lobby.getUsers()) {
-                    user.getSession().getAsyncRemote().sendObject(choiceResponse);
-                }
+                performAutomaticRemoval(lobby, entry.getValue());
             }
         }
 
@@ -132,17 +127,99 @@ public class AsyncExecutorImpl implements AsyncExecutor, MessageSourceAware
             // reset de la main
             user.getHand().setPickedAuto(false);
             user.getHand().setPickedCard(null);
+
+            if (CollectionUtils.isEmpty(user.getHand().getCards())) {
+                finishedGame = true;
+            }
         }
 
         LOG.debug("Fin de l'appel asynchrone à la résolution du tour");
 
-        // relance du perform turn
-        performEndTurn(lobby, 30000L);
+        // evaluation de l'état actuel de la partie, si cette dernière ne
+        // contient plus d'utilisateur, on arrête tout
+        if (CollectionUtils.isEmpty(lobby.getUsers())) {
+            finishedGame = true;
+            LOG.info("Le lobby de la partie " + lobby.getName()
+                    + " ne contient plus d'utilisateurs, la partie s'arrête");
+        }
+
+        if (finishedGame) {
+            // la partie est terminée, on envoie la notification de fin de
+            // partie aux joueurs du lobby
+            performEndGame(lobby);
+        } else {
+            // relance du perform turn car la partie n'est pas encore finie
+            performEndTurn(lobby, timeout);
+        }
     }
 
-    @Override
-    public void setMessageSource(MessageSource messageSource)
+    /**
+     * Réalise la suppression de colonne automatiquement
+     * 
+     * @param lobby
+     *            lobby à traiter
+     * @param user
+     *            utilisateur devant enlever la colonne
+     */
+    protected void performAutomaticRemoval(Lobby lobby, User user)
     {
-        this.messageSource = messageSource;
+        RemoveColumnChoiceResponse choiceResponse = new RemoveColumnChoiceResponse();
+
+        choiceResponse.setState(State.OK);
+        choiceResponse.setAction(OutputAction.REMOVE_LINE);
+        choiceResponse.setUser(user);
+        choiceResponse.setLine(0);
+
+        for (User userInLobby : lobby.getUsers()) {
+            userInLobby.getSession().getAsyncRemote().sendObject(choiceResponse);
+        }
+    }
+
+    /**
+     * Fin de partie, envoi d'une notification aux joueurs du lobby
+     * 
+     * @param lobby
+     *            lobby à traiter
+     */
+    protected void performEndGame(Lobby lobby)
+    {
+        // détermination du gagnant
+        User winner = null;
+        Integer winnerSum = Integer.MAX_VALUE;
+
+        for (User user : lobby.getUsers()) {
+            Integer sum = 0;
+
+            for (Card card : user.getHand().getTakenCards()) {
+                sum = sum + card.getOxHeads();
+            }
+
+            if (winnerSum.compareTo(sum) > 0) {
+                winnerSum = sum;
+                winner = user;
+            }
+        }
+
+        EndGameResponse response = new EndGameResponse();
+
+        response.setAction(OutputAction.END_GAME);
+        response.setState(State.OK);
+        response.setWinner(winner);
+        response.setLobby(lobby);
+
+        for (User user : lobby.getUsers()) {
+            if (user.equals(winner)) {
+                user.setWonGames(user.getWonGames() + 1);
+            } else {
+                user.setLostGames(user.getLostGames() + 1);
+            }
+
+            user.getSession().getAsyncRemote().sendObject(response);
+        }
+
+        // destruction de la partie dans le serveur
+        serverState.getLobbies().remove(lobby);
+
+        LOG.info("La partie " + lobby.getName() + " est désormais terminée");
     }
 }

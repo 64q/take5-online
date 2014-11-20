@@ -38,7 +38,8 @@ public class GameServerEndpoint
     @OnMessage
     public void onMessage(Session session, Message<AbstractParams> message) throws IOException, EncodeException
     {
-        LOG.info("Réception d'un message de type '" + message.getAction().name() + "'");
+        LOG.info("Réception d'un message de type '" + message.getAction().name() + "' depuis la session = "
+                + session.getId());
 
         dispatcher.dispatch(session, message);
     }
@@ -46,7 +47,7 @@ public class GameServerEndpoint
     @OnOpen
     public void openConnection(Session session)
     {
-        LOG.info("Connexion d'un nouveau client : " + session.getId());
+        LOG.info("Connexion d'un nouveau client session = " + session.getId());
     }
 
     @OnClose

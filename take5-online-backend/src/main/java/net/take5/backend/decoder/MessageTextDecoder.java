@@ -36,7 +36,7 @@ public class MessageTextDecoder implements Decoder.Text<Message<AbstractParams>>
                 CreateLobbyParams.class, InputAction.CREATE_LOBBY.name()), new NamedType(JoinLobbyParams.class,
                 InputAction.JOIN_LOBBY.name()), new NamedType(QuitLobbyParams.class, InputAction.QUIT_LOBBY.name()),
                 new NamedType(CardChoiceParams.class, InputAction.CARD_CHOICE.name()), new NamedType(
-                        RemoveColumnParams.class, InputAction.REMOVE_COLUMN.name()));
+                        RemoveColumnParams.class, InputAction.REMOVE_LINE.name()));
     }
 
     @Override
