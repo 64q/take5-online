@@ -29,7 +29,48 @@
     var socket = new WebSocket("ws://localhost:8080/take5-online-backend/game");
 
     socket.onopen = function(event) {
-      console.log("Socket connectée")
+      console.log("Socket connectée");
+      
+      var cards = document.querySelectorAll("#hand tr td");
+      
+      for (var i = 0; i < cards.length; i++) {
+        (function(i) {
+          cards[i].style.background = "white";
+          cards[i].addEventListener("click", function(event) {
+            var obj = {
+                action: "CARD_CHOICE",
+                params: {
+                  card: i,
+                }
+            };
+            
+            console.info("Carte " + i + " envoyée");
+            
+            socket.send(JSON.stringify(obj));
+            this.style.background = "yellow";
+          });
+        })(i);
+      }
+      
+      var buttons = document.querySelectorAll(".remove-column");
+      
+      for (var i = 0; i < buttons.length; i++) {
+        (function(i) {
+          buttons[i].addEventListener("click", function(event) {
+            var obj = {
+                action: "REMOVE_LINE",
+                params: {
+                  line: i
+                }
+            };
+            
+            console.info("Suppression de la colonne " + i);
+            
+            socket.send(JSON.stringify(obj));
+          });
+        })(i);
+      }
+      
     };
 
     socket.onmessage = function(event) {
@@ -95,26 +136,6 @@
         printNotification(data.notification);
       } else if (data.action == "INIT_GAME") {
         console.info("Partie démarrée");
-        
-        var buttons = document.querySelectorAll(".remove-column");
-        
-        for (var i = 0; i < buttons.length; i++) {
-          (function(i) {
-            buttons[i].addEventListener("click", function(event) {
-              var obj = {
-                  action: "REMOVE_LINE",
-                  params: {
-                    line: i
-                  }
-              };
-              
-              console.info("Suppression de la colonne " + i);
-              
-              socket.send(JSON.stringify(obj));
-            });
-          })(i);
-        }
-        
         drawBoard(data);
       } else if (data.action == "END_TURN") {
         console.info("Fin du tour, carte choisie = " + data.hand.pickedCard.value + ", choisie automatiquement = " + data.hand.pickedAuto);
@@ -248,23 +269,14 @@
       
       var cards = document.querySelectorAll("#hand tr td");
       
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].innerHTML = "";
+      }
+      
       for (var i = 0; i < data.hand.cards.length; i++) {
         (function(i) {
           cards[i].style.background = "white";
           cards[i].innerHTML = data.hand.cards[i].value;
-          cards[i].addEventListener("click", function(event) {
-            var obj = {
-                action: "CARD_CHOICE",
-                params: {
-                  card: i,
-                }
-            };
-            
-            console.info("Carte " + i + " envoyée");
-            
-            socket.send(JSON.stringify(obj));
-            this.style.background = "yellow";
-          });
         })(i);
       }
     }

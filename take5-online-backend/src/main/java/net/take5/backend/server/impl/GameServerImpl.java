@@ -62,11 +62,14 @@ public class GameServerImpl implements GameServer
 
         notification.setState(State.OK);
         notification.setAction(OutputAction.USER_QUIT_SERVER);
-        notification.setUser(oldUser);
 
         serverState.remove(session);
 
-        LOG.info("L'utilisateur " + oldUser.getUsername() + " a quitté le serveur");
+        if (oldUser != null) {
+            notification.setUser(oldUser);
+
+            LOG.info("L'utilisateur " + oldUser.getUsername() + " a quitté le serveur");
+        }
 
         for (User user : serverState.getUsers().values()) {
             user.getSession().getAsyncRemote().sendObject(notification);
