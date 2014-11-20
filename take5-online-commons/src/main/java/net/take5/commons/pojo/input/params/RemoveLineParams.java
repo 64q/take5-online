@@ -2,7 +2,7 @@ package net.take5.commons.pojo.input.params;
 
 import net.take5.commons.pojo.input.AbstractParams;
 
-public class RemoveColumnParams extends AbstractParams
+public class RemoveLineParams extends AbstractParams
 {
     /** Index de la ligne à retirer */
     private Integer line;

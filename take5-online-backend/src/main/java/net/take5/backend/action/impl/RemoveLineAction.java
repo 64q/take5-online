@@ -9,7 +9,7 @@ import javax.websocket.Session;
 import net.take5.backend.action.AbstractAction;
 import net.take5.backend.context.ServerState;
 import net.take5.commons.pojo.input.Message;
-import net.take5.commons.pojo.input.params.RemoveColumnParams;
+import net.take5.commons.pojo.input.params.RemoveLineParams;
 import net.take5.commons.pojo.output.common.Card;
 import net.take5.commons.pojo.output.common.ErrorCode;
 import net.take5.commons.pojo.output.common.GameBoard;
@@ -17,13 +17,13 @@ import net.take5.commons.pojo.output.common.LobbyState;
 import net.take5.commons.pojo.output.common.OutputAction;
 import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
-import net.take5.commons.pojo.output.response.RemoveColumnChoiceResponse;
+import net.take5.commons.pojo.output.response.RemoveLineResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component("REMOVE_LINE")
-public class RemoveLineAction extends AbstractAction<RemoveColumnParams, RemoveColumnChoiceResponse>
+public class RemoveLineAction extends AbstractAction<RemoveLineParams, RemoveLineResponse>
 {
     /** Etat du serveur */
     @Autowired
@@ -32,12 +32,12 @@ public class RemoveLineAction extends AbstractAction<RemoveColumnParams, RemoveC
     @Override
     public void init()
     {
-        response = new RemoveColumnChoiceResponse();
+        response = new RemoveLineResponse();
         response.setAction(OutputAction.REMOVE_LINE);
     }
 
     @Override
-    public void execute(Session session, Message<RemoveColumnParams> message) throws IOException, EncodeException
+    public void execute(Session session, Message<RemoveLineParams> message) throws IOException, EncodeException
     {
         Integer lineIndex = message.getParams().getLine();
         User user = serverState.getUser(session);
@@ -72,7 +72,7 @@ public class RemoveLineAction extends AbstractAction<RemoveColumnParams, RemoveC
     }
 
     @Override
-    public Boolean validate(Session session, Message<RemoveColumnParams> message)
+    public Boolean validate(Session session, Message<RemoveLineParams> message)
     {
         Boolean isValid = true;
         Integer lineIndex = message.getParams().getLine();

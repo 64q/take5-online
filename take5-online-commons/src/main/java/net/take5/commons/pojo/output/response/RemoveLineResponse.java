@@ -3,7 +3,7 @@ package net.take5.commons.pojo.output.response;
 import net.take5.commons.pojo.output.AbstractResponse;
 import net.take5.commons.pojo.output.common.User;
 
-public class RemoveColumnChoiceResponse extends AbstractResponse
+public class RemoveLineResponse extends AbstractResponse
 {
     /** Utilisateur devant retirer une colonne */
     private User user;

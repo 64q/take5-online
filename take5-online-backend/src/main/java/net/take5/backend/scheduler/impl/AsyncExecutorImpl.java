@@ -16,7 +16,7 @@ import net.take5.commons.pojo.output.common.State;
 import net.take5.commons.pojo.output.common.User;
 import net.take5.commons.pojo.output.response.EndGameResponse;
 import net.take5.commons.pojo.output.response.EndTurnResponse;
-import net.take5.commons.pojo.output.response.RemoveColumnChoiceResponse;
+import net.take5.commons.pojo.output.response.RemoveLineResponse;
 import net.take5.commons.pojo.output.response.RemoveColumnResponse;
 import net.take5.engine.service.Take5Engine;
 
@@ -76,7 +76,7 @@ public class AsyncExecutorImpl implements AsyncExecutor
         Iterator<Map.Entry<Card, User>> it = selectedCards.entrySet().iterator();
         Map.Entry<Card, User> entry = it.next();
 
-        if (gameEngine.determineRemoveColumn(lobby, entry.getKey())) {
+        if (gameEngine.determineRemoveLine(lobby, entry.getKey())) {
             lobby.setState(LobbyState.CHOICE);
 
             RemoveColumnResponse notification = new RemoveColumnResponse();
@@ -105,7 +105,7 @@ public class AsyncExecutorImpl implements AsyncExecutor
                         + " n'a pas pu être menée a bien", e);
             }
 
-            if (gameEngine.resolveRemoveColumn(lobby, entry.getValue())) {
+            if (gameEngine.resolveRemoveLine(lobby, entry.getValue())) {
                 performAutomaticRemoval(lobby, entry.getValue());
             }
         }
@@ -163,7 +163,7 @@ public class AsyncExecutorImpl implements AsyncExecutor
      */
     protected void performAutomaticRemoval(Lobby lobby, User user)
     {
-        RemoveColumnChoiceResponse choiceResponse = new RemoveColumnChoiceResponse();
+        RemoveLineResponse choiceResponse = new RemoveLineResponse();
 
         choiceResponse.setState(State.OK);
         choiceResponse.setAction(OutputAction.REMOVE_LINE);

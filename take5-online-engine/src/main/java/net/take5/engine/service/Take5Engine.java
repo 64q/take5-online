@@ -62,7 +62,7 @@ public interface Take5Engine
     void resolveTurn(Lobby lobby);
 
     /**
-     * Méthode déterminant si un joueur doit enlever une colonne
+     * Méthode déterminant si un joueur doit enlever une ligne
      * 
      * @param lobby
      *            lobby à traiter
@@ -70,7 +70,7 @@ public interface Take5Engine
      *            la carte à insérer
      * @return vrai si la plus petite carte est insérable
      */
-    Boolean determineRemoveColumn(Lobby lobby, Card card);
+    Boolean determineRemoveLine(Lobby lobby, Card card);
 
     /**
      * Résout les picked cards non attribuées durant le timer
@@ -81,7 +81,7 @@ public interface Take5Engine
     void resolvePickedCards(Lobby lobby);
 
     /**
-     * Résout la suppression d'une colonne si nécessaire
+     * Résout la suppression d'une ligne si nécessaire
      * 
      * @param lobby
      *            lobby à traiter
@@ -90,5 +90,5 @@ public interface Take5Engine
      * @param retourne
      *            vrai si la suppression a été faite automatiquement
      */
-    Boolean resolveRemoveColumn(Lobby lobby, User user);
+    Boolean resolveRemoveLine(Lobby lobby, User user);
 }

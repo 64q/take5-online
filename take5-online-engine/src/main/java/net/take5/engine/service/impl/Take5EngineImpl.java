@@ -189,7 +189,7 @@ public class Take5EngineImpl implements Take5Engine
     }
 
     @Override
-    public Boolean determineRemoveColumn(Lobby lobby, Card card)
+    public Boolean determineRemoveLine(Lobby lobby, Card card)
     {
         Boolean notInsertable = true;
         List<List<Card>> board = lobby.getGameBoard().getBoard();
@@ -223,7 +223,7 @@ public class Take5EngineImpl implements Take5Engine
     }
 
     @Override
-    public Boolean resolveRemoveColumn(Lobby lobby, User user)
+    public Boolean resolveRemoveLine(Lobby lobby, User user)
     {
         Boolean notEmpty = false;
         GameBoard board = lobby.getGameBoard();
