@@ -74,6 +74,17 @@ body {
 	animation: rotateplane 7.0s infinite ease;
 }
 
+.message-container {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	margin-left: -150px;
+	z-index: 10;
+}
+.message-container div{
+	background-color: #FFF;
+}
+
 .shaky {
 	-webkit-animation: shake 5s infinite ease-in-out;
 	animation: shake 5s infinite ease-in-out;

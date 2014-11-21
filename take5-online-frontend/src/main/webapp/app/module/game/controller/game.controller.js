@@ -11,8 +11,9 @@ controllers.controller('GameCtrl', [
 		'$state',
 		'STATUT',
 		'$rootScope',
+		'MessageService',
 		function($scope, WebSocketManagerService, ACTION, $state, STATUT,
-				$rootScope) {
+				$rootScope, MessageService) {
 
 			$scope.clickOnCard = function(index) {
 				WebSocketManagerService.send({
@@ -21,42 +22,59 @@ controllers.controller('GameCtrl', [
 						card : index
 					}
 				});
+				
+				MessageService.clearMessages();
+				MessageService.addMessageCode('game', 'WAITING_END_TURN');
 			};
-			
-			var checkEndTurn = function(data){
+
+			var checkEndTurn = function(data) {
 				$rootScope.hand = data.hand;
 				$rootScope.gameBoard = data.gameBoard;
+				MessageService.clearMessages();
+				MessageService.addMessageCode('game', 'PICK_CARD');
 			};
-			
-			WebSocketManagerService.register(ACTION.END_TURN).then(null, null, checkEndTurn);
-			
-			
+
+			WebSocketManagerService.register(ACTION.END_TURN).then(null, null,
+					checkEndTurn);
+
 			var checkRemoveColumn = function(data) {
-				if($rootScope.username === data.user.username){
+				if ($rootScope.username === data.user.username) {
+					MessageService.clearMessages();
+					MessageService.addMessageCode('game', 'REMOVE_LINE');
 					console.log('En attente d\'un choix de ligne');
 					$scope.mustRemoveColumn = true;
 				}
 			};
-			
-			WebSocketManagerService.register(ACTION.REMOVE_COLUMN).then(null, null, checkRemoveColumn);
-			
-			$scope.pickLine= function(index) {
-				if($scope.mustRemoveColumn){
+
+			WebSocketManagerService.register(ACTION.REMOVE_LINE_CHOICE).then(
+					null, null, checkRemoveColumn);
+
+			$scope.pickLine = function(index) {
+				console.log(index);
+				if ($scope.mustRemoveColumn) {
 					$scope.mustRemoveColumn = false;
 					WebSocketManagerService.send({
-						action : ACTION.REMOVE_COLUMN,
+						action : ACTION.REMOVE_LINE,
 						params : {
-							column : index
+							line : index
 						}
 					});
+					MessageService.clearMessages();
+					MessageService.addMessageCode('game', 'WAITING_END_TURN');
 				}
 			};
-			// $rootScope.gameBoard = {board : [[{value: 15, oxHeads: 1},
-			// {value: 1, oxHeads: 5}], [{value: 15, oxHeads: 1}, {value: 1,
-			// oxHeads: 5}]]};
-			// $rootScope.hand = {cards : [{value: 15, oxHeads: 1}, {value: 1,
-			// oxHeads: 5}, {value: 15, oxHeads: 7}, {value: 15, oxHeads: 3},
-			// {value: 15, oxHeads: 1}, {value: 1, oxHeads: 2}, {value: 15,
-			// oxHeads: 7}, {value: 15, oxHeads: 3}, {value: 15, oxHeads: 1},
-			// {value: 1, oxHeads: 5}]};
+			
+			
+			var endGame = function(data) {
+				MessageService.clearMessages();
+				if($rootScope.username === data.winner.username){
+					MessageService.addMessageCode('game', 'WIN');
+				}else{
+					MessageService.addMessageCode('game', 'LOSE');
+				}
+				
+			};
+
+			WebSocketManagerService.register(ACTION.END_GAME).then(
+					null, null, endGame);
 		} ]);

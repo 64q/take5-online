@@ -2,9 +2,10 @@
 
 /* App Module */
 
-var app = angular.module('take5App', [ 'ui.router', 'take5Controllers.login',
-		'take5Controllers.home', 'take5Controllers.lobby.create', 'take5Controllers.lobby', 'take5Controllers.game',
-		'take5Services.websocket', 'take5Services.constant' ]);
+var app = angular.module('take5App', [ 'ui.router', 'ngSanitize', 'ngLocalize', 'take5Controllers.login',
+		'take5Controllers.home', 'take5Controllers.lobby.create',
+		'take5Controllers.lobby', 'take5Controllers.game',
+		'take5Services.websocket', 'take5Services.constant', 'take5Services.message' ]);
 
 app.config([ '$urlRouterProvider', '$stateProvider',
 		function($urlRouterProvider, $stateProvider) {
@@ -32,13 +33,14 @@ app.config([ '$urlRouterProvider', '$stateProvider',
 				templateUrl : "app/module/game/view/game.view.html",
 				controller : 'GameCtrl'
 			});
-			
+
 		} ]);
 
-app.run(['$location', function($location){
+app.run([ '$location', function($location) {
 	$location.path('/login');
-}]);
+} ]);
 
-app.run(['$rootScope', 'LOBBY_STATE', function ($rootScope, LOBBY_STATE) {
-    $rootScope.LOBBY_STATE = LOBBY_STATE;
- }]);
+app.run([ '$rootScope', 'LOBBY_STATE', function($rootScope, LOBBY_STATE) {
+	$rootScope.LOBBY_STATE = LOBBY_STATE;
+} ]);
+

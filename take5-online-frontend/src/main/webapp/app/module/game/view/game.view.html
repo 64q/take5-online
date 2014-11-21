@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="title shake">Game</div>
 	<div ng-repeat="line in gameBoard.board" ng-class="{'choosable-line' 	 : mustRemoveColumn}" class="row">
-			<span ng-repeat="card in line" ng-click="pickLine($parent.$index)" class="col-md-1 card-container" ng-include="'app/img/card/card_'+card.oxHeads+'.svg'"></span>
+			<span ng-repeat="card in line" ng-click="pickLine($parent.$parent.$index)" class="col-md-1 card-container" ng-include="'app/img/card/card_'+card.oxHeads+'.svg'"></span>
 	</div>
 	<div class="row hands">
 			<span class="col-md-1 card-container" ng-click="clickOnCard($index)" ng-repeat="card in hand.cards" ng-include="'app/img/card/card_'+card.oxHeads+'.svg'"></span>
