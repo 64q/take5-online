@@ -8,15 +8,19 @@
 	href="app/bower_components/bootstrap/dist/css/bootstrap.css">
 <link rel="stylesheet" href="app/css/app.css">
 
-<script src="app/bower_components/jquery/jquery.js"></script>
 <script src="app/bower_components/angular/angular.js"></script>
 <script src="app/bower_components/angular-animate/angular-animate.js"></script>
 <script src="app/bower_components/angular-route/angular-route.js"></script>
 <script
 	src="app/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="app/bower_components/\angular-sanitize/angular-sanitize.js"></script>
+<script src="//rawgit.com/doshprompt/bower-angular-localization/master/angular-localization.js"></script>
 </head>
 
 <body>
+	<div class="message-container">
+		<div ng-repeat="message in messages" ng-if="!message.hidden" data-i18n="{{message.code}}"></div>
+	</div>
 	<div class="view-container">
 		<div ui-view class="view-frame"></div>
 	</div>
@@ -29,6 +33,7 @@
 <script src="app/module/game/controller/game.controller.js"></script>
 <script src="app/module/common/service/websocket.service.js"></script>
 <script src="app/module/common/service/constant.service.js"></script>
+<script src="app/module/common/service/message.service.js"></script>
 
 <script src="app/app.js"></script>
 

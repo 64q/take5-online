@@ -4,8 +4,8 @@
 
 var controllers = angular.module('take5Controllers.login', []);
 
-controllers.controller('LoginCtrl', [ '$scope', 'WebSocketManagerService', 'ACTION', '$state', 'STATUT', '$rootScope',
-		function($scope, WebSocketManagerService, ACTION, $state, STATUT, $rootScope) {
+controllers.controller('LoginCtrl', [ '$scope', 'WebSocketManagerService', 'ACTION', '$state', 'STATUT', '$rootScope', 'MessageService',
+		function($scope, WebSocketManagerService, ACTION, $state, STATUT, $rootScope, MessageService) {
 			$scope.user = {};
 			/**
 			 * Callback function which check the result sent by the server.
@@ -14,18 +14,15 @@ controllers.controller('LoginCtrl', [ '$scope', 'WebSocketManagerService', 'ACTI
 			 *            result sent via websocket
 			 */
 			var checkLoginResult = function(data) {
-				console.log(data);
 				if(data.state === STATUT.OK){
 					$rootScope.username = data.username;
+					MessageService.clearMessages();
 					$state.go('home');
 				}else{
-					$scope.alertes = [{
-						statut: data.statut,
-						message: data.reason
-					}];
+					MessageService.clearMessages();
+					MessageService.addMessageCode('login', data.code, true);
 				}
 			};
-			
 			
 			/**
 			 * Send the username to the server.

@@ -17,8 +17,9 @@ services.constant('APP_NAME', 'Take 5!').constant('APP_VERSION', '0.0.1')
 			'QUIT_LOBBY' : 'QUIT_LOBBY',
 			'CARD_CHOICE' : 'CARD_CHOICE',
 			'END_TURN' : 'END_TURN',
-			'REMOVE_COLUMN' : 'REMOVE_COLUMN',
-			'REMOVE_COLUMN_CHOICE' : 'REMOVE_COLUMN_CHOICE'
+			'REMOVE_LINE' : 'REMOVE_LINE',
+			'REMOVE_LINE_CHOICE' : 'REMOVE_LINE_CHOICE',
+			'END_GAME': 'END_GAME'
 		}).constant('STATUT', {
 			'OK' : 'OK',
 			'KO' : 'KO'
