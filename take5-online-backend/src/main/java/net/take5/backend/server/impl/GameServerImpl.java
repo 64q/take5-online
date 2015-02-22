@@ -45,8 +45,8 @@ public class GameServerImpl implements GameServer
     public void dispatch(Session session, Message<AbstractParams> message) throws IOException, EncodeException
     {
         @SuppressWarnings("unchecked")
-        AbstractResponse response = ((Action<AbstractParams>) applicationContext.getBean(message.getAction().name()))
-                .run(session, message);
+        AbstractResponse response = ((Action<AbstractParams, AbstractResponse>) applicationContext.getBean(message
+                .getAction().name())).run(session, message);
 
         // envoi dans la socket de la réponse à la demande
         session.getBasicRemote().sendObject(response);

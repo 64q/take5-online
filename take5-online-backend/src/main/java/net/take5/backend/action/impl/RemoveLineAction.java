@@ -30,7 +30,7 @@ public class RemoveLineAction extends AbstractAction<RemoveLineParams, RemoveLin
     private ServerState serverState;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new RemoveLineResponse();
         response.setAction(OutputAction.REMOVE_LINE);
@@ -77,8 +77,11 @@ public class RemoveLineAction extends AbstractAction<RemoveLineParams, RemoveLin
         Boolean isValid = true;
         Integer lineIndex = message.getParams().getLine();
         User user = serverState.getUser(session);
+        GameBoard gameBoard = null;
 
-        GameBoard gameBoard = user.getCurrentLobby().getGameBoard();
+        if (user.getCurrentLobby() != null) {
+            gameBoard = user.getCurrentLobby().getGameBoard();
+        }
 
         if (lineIndex < 0 || lineIndex >= gameBoard.getBoard().size()) {
             response.setState(State.KO);

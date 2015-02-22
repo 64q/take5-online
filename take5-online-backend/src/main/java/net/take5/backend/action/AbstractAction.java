@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  *            type de réponse à apporter à la requête en entrée
  */
 @Component
-public abstract class AbstractAction<P extends AbstractParams, R extends AbstractResponse> implements Action<P>
+public abstract class AbstractAction<P extends AbstractParams, R extends AbstractResponse> implements Action<P, R>
 {
     /** Réponse à l'action */
     protected R response;
@@ -33,7 +33,7 @@ public abstract class AbstractAction<P extends AbstractParams, R extends Abstrac
     @Override
     public R run(Session session, Message<P> message) throws IOException, EncodeException
     {
-        init();
+        initialize();
 
         // la validation du message en entrée est un pré-requis à l'exécution de
         // la méthode principale de l'action
@@ -50,8 +50,10 @@ public abstract class AbstractAction<P extends AbstractParams, R extends Abstrac
         return response;
     }
 
-    /** Initialise l'action à effectuer */
-    abstract public void init();
+    /**
+     * Initialise l'action à effectuer
+     */
+    public abstract void initialize();
 
     /**
      * Méthode effectuant une action après validation
@@ -64,7 +66,7 @@ public abstract class AbstractAction<P extends AbstractParams, R extends Abstrac
      * @throws IOException
      * @throws EncodeException
      */
-    abstract public void execute(Session session, Message<P> message) throws IOException, EncodeException;
+    public abstract void execute(Session session, Message<P> message) throws IOException, EncodeException;
 
     /**
      * La méthode de validation doit à la fois vérifier le message en entrée et
@@ -76,5 +78,5 @@ public abstract class AbstractAction<P extends AbstractParams, R extends Abstrac
      *            message à analyser
      * @return vrai si l'action est exécutable
      */
-    abstract public Boolean validate(Session session, Message<P> message);
+    public abstract Boolean validate(Session session, Message<P> message);
 }

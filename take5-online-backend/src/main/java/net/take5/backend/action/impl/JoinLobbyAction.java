@@ -39,7 +39,7 @@ public class JoinLobbyAction extends AbstractAction<JoinLobbyParams, JoinLobbyRe
     private MessageSource messageSource;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new JoinLobbyResponse();
         response.setAction(OutputAction.JOIN_LOBBY);

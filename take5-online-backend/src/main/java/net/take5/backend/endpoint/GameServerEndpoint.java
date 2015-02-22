@@ -61,7 +61,7 @@ public class GameServerEndpoint
     @OnError
     public void error(Session session, Throwable t)
     {
-        LOG.error("Erreur remontée sur la WebSocket", t);
+        LOG.error("Erreur remontée sur la WebSocket pour la session = " + session.getId(), t);
 
         dispatcher.remove(session);
     }

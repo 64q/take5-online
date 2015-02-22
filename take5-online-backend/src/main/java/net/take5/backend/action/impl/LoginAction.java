@@ -107,7 +107,7 @@ public class LoginAction extends AbstractAction<LoginParams, LoginResponse> impl
     }
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new LoginResponse();
         response.setAction(OutputAction.LOGIN);

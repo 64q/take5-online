@@ -24,7 +24,7 @@ public class ListUsersAction extends AbstractAction<NoParams, ListUsersResponse>
     private ServerState serverState;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new ListUsersResponse();
         response.setAction(OutputAction.LIST_USERS);

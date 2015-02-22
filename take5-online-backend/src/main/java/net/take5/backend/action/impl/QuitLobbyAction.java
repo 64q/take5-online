@@ -46,7 +46,7 @@ public class QuitLobbyAction extends AbstractAction<QuitLobbyParams, QuitLobbyRe
     private MessageSource messageSource;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new QuitLobbyResponse();
         response.setAction(OutputAction.QUIT_LOBBY);

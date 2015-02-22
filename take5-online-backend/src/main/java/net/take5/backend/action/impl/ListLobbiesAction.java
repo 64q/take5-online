@@ -24,7 +24,7 @@ public class ListLobbiesAction extends AbstractAction<NoParams, ListLobbiesRespo
     private ServerState serverState;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new ListLobbiesResponse();
         response.setAction(OutputAction.LIST_LOBBIES);

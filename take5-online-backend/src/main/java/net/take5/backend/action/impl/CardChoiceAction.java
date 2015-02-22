@@ -31,7 +31,7 @@ public class CardChoiceAction extends AbstractAction<CardChoiceParams, CardChoic
     private ServerState serverState;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new CardChoiceResponse();
         response.setAction(OutputAction.CARD_CHOICE);

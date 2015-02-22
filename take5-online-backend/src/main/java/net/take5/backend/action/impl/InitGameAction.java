@@ -43,7 +43,7 @@ public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> i
     private Take5Engine gameEngine;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new InitGameResponse();
         response.setAction(OutputAction.INIT_GAME);

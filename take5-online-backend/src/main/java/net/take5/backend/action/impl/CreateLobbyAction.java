@@ -39,7 +39,7 @@ public class CreateLobbyAction extends AbstractAction<CreateLobbyParams, CreateL
     private Take5Engine gameEngine;
 
     @Override
-    public void init()
+    public void initialize()
     {
         response = new CreateLobbyResponse();
         response.setAction(OutputAction.CREATE_LOBBY);

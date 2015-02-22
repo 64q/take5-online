@@ -15,13 +15,14 @@ import net.take5.commons.pojo.output.AbstractResponse;
  * 
  * @author Quentin
  * 
- * @param <T>
+ * @param <P>
  *            type de paramètre transmis par l'action reçue
+ * @param <R>
+ *            type de réponse à apporter au message en entrée
  */
-public interface Action<T extends AbstractParams>
+public interface Action<P extends AbstractParams, R extends AbstractResponse>
 {
     /**
-     * 
      * Exécute une action vis à vis d'un message reçu en paramètre
      * 
      * @param session
@@ -32,5 +33,5 @@ public interface Action<T extends AbstractParams>
      * @throws IOException
      * @throws EncodeException
      */
-    public AbstractResponse run(Session session, Message<T> message) throws IOException, EncodeException;
+    public R run(Session session, Message<P> message) throws IOException, EncodeException;
 }
