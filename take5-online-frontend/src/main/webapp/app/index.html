@@ -19,7 +19,7 @@
 
 <body>
 	<div class="message-container">
-		<div ng-repeat="message in messages" ng-if="!message.hidden" data-i18n="{{message.code}}"></div>
+		<div ng-repeat="message in messages" ng-if="!message.hidden" data-i18n="{{message.code}}" class="alert alert-success"></div>
 	</div>
 	<div class="view-container">
 		<div ui-view class="view-frame"></div>
