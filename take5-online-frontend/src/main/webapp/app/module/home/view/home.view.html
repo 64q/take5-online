@@ -1,7 +1,7 @@
 <div class="container-fluid ">
-	<h1 class="shaky">The server</h1>
 	<div class="row">
 		<div class="col-md-6">
+			<h2 class="shaky">The Games</h1>
 			<table class="table table-background table-striped">
 				<tr>
 					<th>Lobby's name</th>
@@ -19,12 +19,13 @@
 			</table>
 		</div>
 		<div class="col-md-6">
+			<h2 class="shaky">The Users</h1>
 			<table class="table table-background table-striped">
 				<tr>
 					<th>Username</th>
 				</tr>
 				<tr ng-repeat="user in game.users">
-					<td>{{user.username}}</td>
+					<td><span ng-if="user.username === username" title="You" class="glyphicon glyphicon-star"></span> {{user.username}}</td>
 				</tr>
 			</table>
 		</div>

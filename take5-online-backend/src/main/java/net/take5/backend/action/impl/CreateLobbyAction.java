@@ -24,85 +24,106 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("CREATE_LOBBY")
-public class CreateLobbyAction extends AbstractAction<CreateLobbyParams, CreateLobbyResponse> implements
-        MessageSourceAware
-{
-    /** Message source */
-    private MessageSource messageSource;
+public class CreateLobbyAction extends
+		AbstractAction<CreateLobbyParams, CreateLobbyResponse> implements
+		MessageSourceAware {
+	/** Message source */
+	private MessageSource messageSource;
 
-    /** Server state */
-    @Autowired
-    private ServerState serverState;
+	/** Server state */
+	@Autowired
+	private ServerState serverState;
 
-    /** Moteur de jeu */
-    @Autowired
-    private Take5Engine gameEngine;
+	/** Moteur de jeu */
+	@Autowired
+	private Take5Engine gameEngine;
 
-    @Override
-    public void initialize()
-    {
-        response = new CreateLobbyResponse();
-        response.setAction(OutputAction.CREATE_LOBBY);
-    }
+	@Override
+	public void initialize() {
+		response = new CreateLobbyResponse();
+		response.setAction(OutputAction.CREATE_LOBBY);
+	}
 
-    @Override
-    public void execute(Session session, Message<CreateLobbyParams> message)
-    {
-        String name = message.getParams().getName();
-        // récupération de l'utilisateur connecté
-        User user = serverState.getUsers().get(session);
+	@Override
+	public void execute(Session session, Message<CreateLobbyParams> message) {
+		String name = message.getParams().getName();
+		// récupération de l'utilisateur connecté
+		User user = serverState.getUsers().get(session);
 
-        // création du lobby
-        Lobby lobby = gameEngine.createLobby(name, user);
+		// création du lobby
+		Lobby lobby = gameEngine.createLobby(name, user);
 
-        response.setState(State.OK);
-        response.setLobby(lobby);
+		response.setState(State.OK);
+		response.setLobby(lobby);
 
-        // ajout à la liste des lobbies
-        serverState.getLobbies().add(lobby);
-    }
+		notifyCreateLobby(lobby);
 
-    @Override
-    public Boolean validate(Session session, Message<CreateLobbyParams> message)
-    {
-        Boolean isValid = true;
-        String name = message.getParams().getName();
+		// ajout à la liste des lobbies
+		serverState.getLobbies().add(lobby);
+	}
 
-        // validation que le nom de lobby n'est pas vide
-        if (isValid && StringUtils.isBlank(name)) {
-            response.setReason(messageSource.getMessage(MessageKey.ERROR_LOBBY_NAME_EMPTY, null, Locale.getDefault()));
-            response.setCode(ErrorCode.LOBBY_NAME_EMPTY);
+	@Override
+	public Boolean validate(Session session, Message<CreateLobbyParams> message) {
+		Boolean isValid = true;
+		String name = message.getParams().getName();
 
-            isValid = false;
-        }
+		// validation que le nom de lobby n'est pas vide
+		if (isValid && StringUtils.isBlank(name)) {
+			response.setReason(messageSource.getMessage(
+					MessageKey.ERROR_LOBBY_NAME_EMPTY, null,
+					Locale.getDefault()));
+			response.setCode(ErrorCode.LOBBY_NAME_EMPTY);
 
-        // validation que l'utilisateur est bien connecté
-        if (isValid && !serverState.userExists(session)) {
-            response.setReason(messageSource.getMessage(MessageKey.ERROR_USER_NOT_LOGGED, null, Locale.getDefault()));
-            response.setCode(ErrorCode.NOT_LOGGED);
+			isValid = false;
+		}
 
-            isValid = false;
-        }
+		// validation que l'utilisateur est bien connecté
+		if (isValid && !serverState.userExists(session)) {
+			response.setReason(messageSource.getMessage(
+					MessageKey.ERROR_USER_NOT_LOGGED, null, Locale.getDefault()));
+			response.setCode(ErrorCode.NOT_LOGGED);
 
-        // validation que l'utilisateur n'est pas déjà dans un lobby
-        if (isValid && serverState.getUser(session).getCurrentLobby() != null) {
-            response.setReason(messageSource.getMessage(MessageKey.ERROR_ALREADY_IN_LOBBY, null, Locale.getDefault()));
-            response.setCode(ErrorCode.ALREADY_IN_LOBBY);
+			isValid = false;
+		}
 
-            isValid = false;
-        }
+		// validation que l'utilisateur n'est pas déjà dans un lobby
+		if (isValid && serverState.getUser(session).getCurrentLobby() != null) {
+			response.setReason(messageSource.getMessage(
+					MessageKey.ERROR_ALREADY_IN_LOBBY, null,
+					Locale.getDefault()));
+			response.setCode(ErrorCode.ALREADY_IN_LOBBY);
 
-        if (!isValid) {
-            response.setState(State.KO);
-        }
+			isValid = false;
+		}
 
-        return isValid;
-    }
+		if (!isValid) {
+			response.setState(State.KO);
+		}
 
-    @Override
-    public void setMessageSource(MessageSource messageSource)
-    {
-        this.messageSource = messageSource;
-    }
+		return isValid;
+	}
+
+	/**
+	 * Notifie aux autres utilisateurs qu'un lobby a été crée
+	 * 
+	 * @param lobby
+	 *            liste des utilisateurs à prévenir
+	 */
+	private void notifyCreateLobby(Lobby lobby) {
+		CreateLobbyResponse notification = new CreateLobbyResponse();
+
+		notification.setState(State.OK);
+		notification.setAction(OutputAction.CREATE_LOBBY);
+		notification.setLobby(lobby);
+
+		for (User user : serverState.getUsers().values()) {
+			user.getSession().getAsyncRemote().sendObject(notification);
+		}
+	}
+
+	@Override
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 
 }

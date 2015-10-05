@@ -81,6 +81,13 @@ controllers.controller('LobbyCtrl', [
 				});
 			};
 
+			var checkDestroyLobby = function(data) {
+				$state.go('home');
+				MessageService.addMessageCode('lobby', 'LOBBY_DESTROYED', true);
+			};
+			WebSocketManagerService.register(ACTION.DESTROY_LOBBY, true).then(
+						null, null, checkDestroyLobby);
+
 			/**
 			 * Remove user
 			 */

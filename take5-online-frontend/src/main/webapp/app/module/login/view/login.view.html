@@ -4,7 +4,7 @@
   	<div class="input-group">
        <input type="text" class="form-control" placeholder="Username" ng-model="user.name">
        <span class="input-group-btn">
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-primary" ng-disabled="!user.name">
              Go!
           </button>
        </span>

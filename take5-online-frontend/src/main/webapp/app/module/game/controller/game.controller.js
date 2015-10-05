@@ -22,7 +22,7 @@ controllers.controller('GameCtrl', [
 						card : index
 					}
 				});
-				
+
 				MessageService.clearMessages();
 				MessageService.addMessageCode('game', 'WAITING_END_TURN');
 			};
@@ -63,8 +63,8 @@ controllers.controller('GameCtrl', [
 					MessageService.addMessageCode('game', 'WAITING_END_TURN');
 				}
 			};
-			
-			
+
+
 			var endGame = function(data) {
 				MessageService.clearMessages();
 				if($rootScope.username === data.winner.username){
@@ -72,9 +72,16 @@ controllers.controller('GameCtrl', [
 				}else{
 					MessageService.addMessageCode('game', 'LOSE');
 				}
-				
+
 			};
 
 			WebSocketManagerService.register(ACTION.END_GAME).then(
 					null, null, endGame);
+
+			var cardSelectedResult = function(data) {
+				$scope.cardSelected = data.pickedCard.value;
+			};
+
+			WebSocketManagerService.register(ACTION.CARD_CHOICE).then(null, null,
+					cardSelectedResult);
 		} ]);

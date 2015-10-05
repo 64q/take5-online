@@ -1,3 +1,4 @@
 {
-	"LOBBY_NAME_EMPTY": "Lobby's name can t be empty, dumbass!"
+	"LOBBY_NAME_EMPTY": "Lobby's name can t be empty, dumbass!",
+    "LOBBY_DESTROYED": "The lobby you were in has been destroyed!"
 }

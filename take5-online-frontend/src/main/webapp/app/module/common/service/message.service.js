@@ -14,13 +14,12 @@ services.factory('MessageService', [
 				},
 				addMessageCode : function(scope, code, timeout) {
 					var message = {code : scope + '.' + code};
-					var tt = $rootScope.messages.length;
+					var messagePosition = $rootScope.messages.length;
 					$rootScope.messages.push(message);
 					if(timeout){
 						$timeout(function(){
-							console.log(tt);
-							$rootScope.messages.splice(tt, 1);
-						}, 2000);
+							$rootScope.messages.splice(messagePosition, 1);
+						}, 6000);
 					}
 				},
 				clearMessages : function(){
