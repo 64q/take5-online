@@ -12,8 +12,9 @@ controllers.controller('GameCtrl', [
 		'STATUT',
 		'$rootScope',
 		'MessageService',
+		'$timeout',
 		function($scope, WebSocketManagerService, ACTION, $state, STATUT,
-				$rootScope, MessageService) {
+				$rootScope, MessageService, $timeout) {
 
 			$scope.clickOnCard = function(index) {
 				WebSocketManagerService.send({
@@ -66,12 +67,19 @@ controllers.controller('GameCtrl', [
 
 
 			var endGame = function(data) {
+				console.log(data)
 				MessageService.clearMessages();
 				if($rootScope.username === data.winner.username){
 					MessageService.addMessageCode('game', 'WIN');
 				}else{
 					MessageService.addMessageCode('game', 'LOSE');
 				}
+				MessageService.addMessageCode('game', 'GOING_LOBBY');
+				$rootScope.lobby.users = data.lobby.users;
+				$timeout(function(){
+					MessageService.clearMessages();
+					$state.go('lobby');
+				}, 3000);
 
 			};
 

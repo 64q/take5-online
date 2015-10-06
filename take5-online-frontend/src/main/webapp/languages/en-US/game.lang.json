@@ -3,5 +3,6 @@
 	"REMOVE_LINE": "Remove a line",
 	"WAITING_END_TURN": "Waiting for this boring turn to be over.",
 	"WIN": "You win!",
-	"LOSE": "You lose."
+	"LOSE": "You lose.",
+	"GOING_LOBBY" : "Redirection to the lobby..."
 }

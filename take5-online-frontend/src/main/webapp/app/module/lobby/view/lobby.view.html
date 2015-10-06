@@ -6,10 +6,12 @@
 				<tr>
 					<th>Username</th>
 					<th>Admin</th>
+					<th>Win / Lose</th>
 				</tr>
 				<tr ng-repeat="user in lobby.users">
 					<td>{{user.username}}</td>
 					<td><li ng-if="user.username === lobby.owner.username" class="glyphicon glyphicon-star-empty"></li></td>
+					<td>{{user.wonGames}} / {{user.lostGames}}</td>
 				</tr>
 			</table>
 		</div>

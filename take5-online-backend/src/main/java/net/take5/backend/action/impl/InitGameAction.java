@@ -26,115 +26,115 @@ import org.springframework.context.MessageSourceAware;
 import org.springframework.stereotype.Component;
 
 @Component("INIT_GAME")
-public class InitGameAction extends AbstractAction<NoParams, InitGameResponse> implements MessageSourceAware
-{
-    /** Etat du serveur */
-    @Autowired
-    private ServerState serverState;
+public class InitGameAction extends AbstractAction<NoParams, InitGameResponse>
+		implements MessageSourceAware {
+	/** Etat du serveur */
+	@Autowired
+	private ServerState serverState;
 
-    /** Message Source */
-    private MessageSource messageSource;
+	/** Message Source */
+	private MessageSource messageSource;
 
-    /** Exécuteur asynchrone d'actions */
-    @Autowired
-    private AsyncExecutor asyncExecutor;
+	/** Exécuteur asynchrone d'actions */
+	@Autowired
+	private AsyncExecutor asyncExecutor;
 
-    @Autowired
-    private Take5Engine gameEngine;
+	@Autowired
+	private Take5Engine gameEngine;
 
-    @Override
-    public void initialize()
-    {
-        response = new InitGameResponse();
-        response.setAction(OutputAction.INIT_GAME);
-        response.setState(State.OK);
-    }
+	@Override
+	public void initialize() {
+		response = new InitGameResponse();
+		response.setAction(OutputAction.INIT_GAME);
+		response.setState(State.OK);
+	}
 
-    @Override
-    public void execute(Session session, Message<NoParams> message) throws IOException, EncodeException
-    {
-        User user = serverState.getUser(session);
-        Lobby lobby = user.getCurrentLobby();
+	@Override
+	public void execute(Session session, Message<NoParams> message)
+			throws IOException, EncodeException {
+		User user = serverState.getUser(session);
+		Lobby lobby = user.getCurrentLobby();
 
-        gameEngine.newGame(lobby);
+		gameEngine.newGame(lobby);
 
-        // Lancement de l'appel asynchrone de la résolution du tour
-        // attention, l'appel est déclenché ensuite toutes les 30 secondes
-        asyncExecutor.performEndTurn(lobby, 30000L);
+		// Lancement de l'appel asynchrone de la résolution du tour
+		// attention, l'appel est déclenché ensuite toutes les 30 secondes
+		asyncExecutor.performEndTurn(lobby, 300L);
 
-        response.setGameBoard(lobby.getGameBoard());
+		response.setGameBoard(lobby.getGameBoard());
 
-        // Notification envoyée aux autres participants que la partie a démarrée
-        notifyInitGame(lobby);
+		// Notification envoyée aux autres participants que la partie a démarrée
+		notifyInitGame(lobby);
 
-        response.setHand(user.getHand());
-    }
+		response.setHand(user.getHand());
+	}
 
-    /**
-     * Envoie une notification de début de partie aux autres participants
-     * 
-     * @param lobby
-     *            lobby à traiter
-     * @throws EncodeException
-     * @throws IOException
-     */
-    private void notifyInitGame(Lobby lobby)
-    {
-        for (User user : lobby.getUsers()) {
-            if (!user.equals(lobby.getOwner())) {
-                // envoi de la main générée pour cet utilisateur
-                response.setHand(user.getHand());
+	/**
+	 * Envoie une notification de début de partie aux autres participants
+	 * 
+	 * @param lobby
+	 *            lobby à traiter
+	 * @throws EncodeException
+	 * @throws IOException
+	 */
+	private void notifyInitGame(Lobby lobby) {
+		for (User user : lobby.getUsers()) {
+			if (!user.equals(lobby.getOwner())) {
+				// envoi de la main générée pour cet utilisateur
+				response.setHand(user.getHand());
 
-                user.getSession().getAsyncRemote().sendObject(response);
-            }
-        }
-    }
+				user.getSession().getAsyncRemote().sendObject(response);
+			}
+		}
+	}
 
-    @Override
-    public Boolean validate(Session session, Message<NoParams> message)
-    {
-        Boolean isValid = true;
+	@Override
+	public Boolean validate(Session session, Message<NoParams> message) {
+		Boolean isValid = true;
 
-        User user = serverState.getUser(session);
+		User user = serverState.getUser(session);
 
-        // vérification que l'utilisateur est bien connecté
-        if (isValid && user == null) {
-            response.setReason(messageSource.getMessage(MessageKey.ERROR_USER_NOT_LOGGED, null, Locale.getDefault()));
-            response.setCode(ErrorCode.NOT_LOGGED);
+		// vérification que l'utilisateur est bien connecté
+		if (isValid && user == null) {
+			response.setReason(messageSource.getMessage(
+					MessageKey.ERROR_USER_NOT_LOGGED, null, Locale.getDefault()));
+			response.setCode(ErrorCode.NOT_LOGGED);
 
-            isValid = false;
-        }
+			isValid = false;
+		}
 
-        if (isValid) {
-            Lobby lobby = user.getCurrentLobby();
+		if (isValid) {
+			Lobby lobby = user.getCurrentLobby();
 
-            if (lobby == null) {
-                response.setReason(messageSource.getMessage(MessageKey.ERROR_NOT_IN_LOBBY, null, Locale.getDefault()));
-                response.setCode(ErrorCode.NOT_IN_LOBBY);
+			if (lobby == null) {
+				response.setReason(messageSource.getMessage(
+						MessageKey.ERROR_NOT_IN_LOBBY, null,
+						Locale.getDefault()));
+				response.setCode(ErrorCode.NOT_IN_LOBBY);
 
-                isValid = false;
-            }
+				isValid = false;
+			}
 
-            // vérifie que le démarrage est bien effectué par le créateur
-            if (isValid && !lobby.getOwner().equals(user)) {
-                response.setReason(messageSource.getMessage(MessageKey.ERROR_CANNOT_INIT_GAME, null,
-                        Locale.getDefault()));
-                response.setCode(ErrorCode.CANNOT_INIT_GAME);
+			// vérifie que le démarrage est bien effectué par le créateur
+			if (isValid && !lobby.getOwner().equals(user)) {
+				response.setReason(messageSource.getMessage(
+						MessageKey.ERROR_CANNOT_INIT_GAME, null,
+						Locale.getDefault()));
+				response.setCode(ErrorCode.CANNOT_INIT_GAME);
 
-                isValid = false;
-            }
-        }
+				isValid = false;
+			}
+		}
 
-        if (!isValid) {
-            response.setState(State.KO);
-        }
+		if (!isValid) {
+			response.setState(State.KO);
+		}
 
-        return isValid;
-    }
+		return isValid;
+	}
 
-    @Override
-    public void setMessageSource(MessageSource messageSource)
-    {
-        this.messageSource = messageSource;
-    }
+	@Override
+	public void setMessageSource(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 }
